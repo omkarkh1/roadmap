@@ -3,632 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accelerated Quant Finance & AI Program</title>
+    <title>Interdisciplinary Curriculum: Math, Finance, AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .tab-button.active { border-color: #8B4513; color: #8B4513; background-color: #FAF3E0; }
-        .tab-button { border-color: #D2B48C; }
-        .content-section { display: none; }
-        .content-section.active { display: block; }
-        .card-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out; }
-        .card.open .card-content { max-height: 1000px; /* Adjust as needed */ }
-        .chart-container { position: relative; width: 100%; max-width: 800px; margin-left: auto; margin-right: auto; height: 350px; max-height: 450px; }
-        @media (min-width: 768px) { .chart-container { height: 400px; } }
-        /* Scrollbar for tables */
-        .table-container { max-height: 500px; overflow-y: auto; }
-        table th, table td { white-space: normal; word-wrap: break-word; }
+        body {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+        }
+        .section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out;
+        }
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .card {
+            background: rgba(45, 55, 72, 0.8);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
     </style>
 </head>
-<body class="bg-[#FAF3E0] text-[#36454F]">
-
-    <header class="bg-[#8B4513] text-white shadow-lg sticky top-0 z-50">
-        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex items-center">
-                    <a href="#" class="text-xl font-bold">Quant Finance & AI Program</a>
-                </div>
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#overview" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-[#FAF3E0] hover:text-[#8B4513]">Overview</a>
-                        <a href="#curriculum" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-[#FAF3E0] hover:text-[#8B4513]">Curriculum</a>
-                        <a href="#core-pillars" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-[#FAF3E0] hover:text-[#8B4513]">Core Pillars</a>
-                        <a href="#resources" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-[#FAF3E0] hover:text-[#8B4513]">Resources</a>
-                        <a href="#careers" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-[#FAF3E0] hover:text-[#8B4513]">Career Paths</a>
-                        <a href="#weekly-plan" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-[#FAF3E0] hover:text-[#8B4513]">Weekly Plan</a>
-                    </div>
-                </div>
-                <div class="-mr-2 flex md:hidden">
-                    <button id="mobile-menu-button" type="button" class="bg-[#8B4513] inline-flex items-center justify-center p-2 rounded-md text-gray-200 hover:text-white hover:bg-opacity-75 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#8B4513] focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
-                        <span class="sr-only">Open main menu</span>
-                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                        <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </nav>
-        <div class="md:hidden hidden" id="mobile-menu">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#overview" class="nav-link block px-3 py-2 rounded-md text-base font-medium hover:bg-[#FAF3E0] hover:text-[#8B4513]">Overview</a>
-                <a href="#curriculum" class="nav-link block px-3 py-2 rounded-md text-base font-medium hover:bg-[#FAF3E0] hover:text-[#8B4513]">Curriculum</a>
-                <a href="#core-pillars" class="nav-link block px-3 py-2 rounded-md text-base font-medium hover:bg-[#FAF3E0] hover:text-[#8B4513]">Core Pillars</a>
-                <a href="#resources" class="nav-link block px-3 py-2 rounded-md text-base font-medium hover:bg-[#FAF3E0] hover:text-[#8B4513]">Resources</a>
-                <a href="#careers" class="nav-link block px-3 py-2 rounded-md text-base font-medium hover:bg-[#FAF3E0] hover:text-[#8B4513]">Career Paths</a>
-                <a href="#weekly-plan" class="nav-link block px-3 py-2 rounded-md text-base font-medium hover:bg-[#FAF3E0] hover:text-[#8B4513]">Weekly Plan</a>
+<body class="min-h-screen">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-gray-900 bg-opacity-80 backdrop-blur-md z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-indigo-400">Math, Finance & AI Curriculum</h1>
+            <div class="space-x-4">
+                <a href="#home" class="text-gray-300 hover:text-indigo-400 transition">Home</a>
+                <a href="#overview" class="text-gray-300 hover:text-indigo-400 transition">Overview</a>
+                <a href="#structure" class="text-gray-300 hover:text-indigo-400 transition">Structure</a>
+                <a href="#phases" class="text-gray-300 hover:text-indigo-400 transition">Phases</a>
             </div>
         </div>
-    </header>
+    </nav>
 
-    <main class="container mx-auto p-4 sm:p-6 lg:p-8">
-        
-        <section id="overview" class="content-section active pt-8">
-            <h1 class="text-4xl font-bold text-[#8B4513] mb-6 text-center">Accelerated 6-Month Program: Quantitative Finance & AI</h1>
-            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
-                <p class="text-lg mb-4">This interactive guide outlines a highly intensive, practical 6-month self-directed learning pathway for software developers with 3+ years of experience aiming to specialize in quantitative finance and Artificial Intelligence (AI). It leverages your existing programming skills for rapid acquisition of specialized knowledge, facilitating a career transition or significant skill enhancement in the FinTech sector.</p>
-                <p class="text-lg mb-4"><strong>Why this path?</strong> Modern finance is transforming through data-intensive algorithmic solutions, with AI/ML at the forefront. This convergence demands professionals skilled in math, finance, and AI implementation. Your developer background is a key advantage, allowing faster learning by focusing on application rather than programming basics.</p>
-                <p class="text-sm text-gray-600">Navigate through the sections to explore the curriculum, core concepts, learning resources, and potential career outcomes.</p>
-            </div>
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                 <h2 class="text-2xl font-semibold text-[#8B4513] mb-4">Estimated Study Hours Distribution</h2>
-                 <p class="mb-4 text-sm">This chart visualizes the estimated weekly study hours across the 6-month program, broken down by month. This helps you understand the time commitment involved in each phase. The program is designed to be intensive, particularly in the later months with project work.</p>
-                <div class="chart-container">
-                    <canvas id="studyHoursChart"></canvas>
-                </div>
-            </div>
-        </section>
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center pt-16">
+        <div class="text-center max-w-4xl mx-auto px-4">
+            <h2 class="text-5xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
+                Master Math, Finance, and AI in 6 Months
+            </h2>
+            <p class="text-lg md:text-xl text-gray-300 mb-8">
+                A rigorous, interdisciplinary curriculum designed for software developers to unlock the power of mathematics, finance, and artificial intelligence.
+            </p>
+            <a href="#overview" class="inline-block bg-indigo-600 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-indigo-700 transition">
+                Explore the Journey
+            </a>
+        </div>
+    </section>
 
-        <section id="curriculum" class="content-section pt-8">
-            <h2 class="text-3xl font-bold text-[#8B4513] mb-6 text-center">Curriculum Phases</h2>
-            <p class="text-center mb-6 text-md text-gray-700">The 6-month program is divided into three distinct phases, each building upon the last to provide a comprehensive learning experience. Click on each phase to explore its modules and learning objectives.</p>
-            <div class="mb-4 border-b border-gray-300">
-                <nav class="flex flex-wrap -mb-px justify-center" aria-label="Tabs">
-                    <button class="tab-button active curriculum-tab-button whitespace-nowrap py-4 px-6 border-b-2 font-medium text-sm" data-tab="phase1">Phase 1: Foundational Immersion (Months 1-2)</button>
-                    <button class="tab-button curriculum-tab-button whitespace-nowrap py-4 px-6 border-b-2 font-medium text-sm" data-tab="phase2">Phase 2: Applied Specialization (Months 3-4)</button>
-                    <button class="tab-button curriculum-tab-button whitespace-nowrap py-4 px-6 border-b-2 font-medium text-sm" data-tab="phase3">Phase 3: Capstone & Integration (Months 5-6)</button>
-                </nav>
+    <!-- Overview Section -->
+    <section id="overview" class="py-20 section">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h3 class="text-4xl font-bold text-center text-white mb-12">Why This Curriculum?</h3>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="card p-6 rounded-lg">
+                    <h4 class="text-2xl font-semibold text-indigo-400 mb-4">Integrated Learning</h4>
+                    <p class="text-gray-300">
+                        Seamlessly blends mathematics, finance, and AI, building a cohesive skillset that empowers you to innovate at their intersection.
+                    </p>
+                </div>
+                <div class="card p-6 rounded-lg">
+                    <h4 class="text-2xl font-semibold text-indigo-400 mb-4">Practical Focus</h4>
+                    <p class="text-gray-300">
+                        Leverages your coding skills with hands-on Python projects, turning abstract concepts into tangible applications.
+                    </p>
+                </div>
             </div>
+        </div>
+    </section>
 
-            <div id="phase1" class="curriculum-tab-content active">
-                <h3 class="text-2xl font-semibold text-[#4A5568] my-4">Phase 1: Foundational Immersion (Months 1-2)</h3>
-                <p class="mb-4 text-gray-700">This initial phase establishes a robust mathematical foundation tailored for AI/ML and quantitative finance, reinforcing fundamental machine learning concepts. Existing programming skills allow for immediate practical application.</p>
-                <div class="space-y-4">
-                    <div class="card bg-white p-4 rounded-lg shadow-md">
-                        <button class="card-toggle w-full text-left font-semibold text-lg text-[#8B4513] flex justify-between items-center">
-                            <span>Module 1: Linear Algebra for Data Representation & Financial Systems</span> <span class="arrow text-2xl">&#9662;</span>
-                        </button>
-                        <div class="card-content mt-2 text-gray-700">
-                            <p><strong>Key Topics:</strong> Vectors, Matrices, Matrix Operations, Systems of Linear Equations, Linear Transformations, Eigenvalues & Eigenvectors (for PCA).</p>
-                            <p><strong>Learning Objective:</strong> Master linear algebra as the backbone for AI data representation and financial system modeling.</p>
-                        </div>
-                    </div>
-                    <div class="card bg-white p-4 rounded-lg shadow-md">
-                        <button class="card-toggle w-full text-left font-semibold text-lg text-[#8B4513] flex justify-between items-center">
-                            <span>Module 2: Calculus & Optimization for Algorithmic Efficiency</span> <span class="arrow text-2xl">&#9662;</span>
-                        </button>
-                        <div class="card-content mt-2 text-gray-700">
-                            <p><strong>Key Topics:</strong> Derivatives, Gradient Descent, Chain Rule, Multivariate Calculus, Optimization Techniques (Lagrange multipliers, dynamic programming).</p>
-                            <p><strong>Learning Objective:</strong> Understand calculus as the engine for training AI models and optimizing financial decisions.</p>
-                        </div>
-                    </div>
-                    <div class="card bg-white p-4 rounded-lg shadow-md">
-                        <button class="card-toggle w-full text-left font-semibold text-lg text-[#8B4513] flex justify-between items-center">
-                           <span>Module 3: Probability & Statistics for Risk and Prediction</span> <span class="arrow text-2xl">&#9662;</span>
-                        </button>
-                        <div class="card-content mt-2 text-gray-700">
-                            <p><strong>Key Topics:</strong> Probability Foundations, Statistical Inference (MLE, hypothesis testing), Describing Distributions, Time Series Analysis intro, Bayesian Inference.</p>
-                            <p><strong>Learning Objective:</strong> Equip with tools to quantify risk, make predictions, and validate models in stochastic financial markets.</p>
-                        </div>
-                    </div>
-                     <div class="card bg-white p-4 rounded-lg shadow-md">
-                        <button class="card-toggle w-full text-left font-semibold text-lg text-[#8B4513] flex justify-between items-center">
-                           <span>Module 4: Introduction to Stochastic Processes & Advanced Financial Mathematics</span> <span class="arrow text-2xl">&#9662;</span>
-                        </button>
-                        <div class="card-content mt-2 text-gray-700">
-                            <p><strong>Key Topics:</strong> Time-Series Models (ARMA, GARCH), Continuous-Time Stochastic Processes (Brownian Motion), Itô Calculus, Monte Carlo Simulation.</p>
-                            <p><strong>Learning Objective:</strong> Introduce mathematical frameworks for modeling dynamic market behavior, crucial for derivative pricing and risk management.</p>
-                        </div>
-                    </div>
+    <!-- Structure Section -->
+    <section id="structure" class="py-20 bg-gray-800 bg-opacity-50 section">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h3 class="text-4xl font-bold text-center text-white mb-12">Curriculum Structure</h3>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="card p-6 rounded-lg text-center">
+                    <h4 class="text-xl font-semibold text-indigo-400 mb-4">Months 1-2</h4>
+                    <p class="text-gray-300">Foundational Mathematics: Linear Algebra, Calculus, Probability & Statistics.</p>
+                </div>
+                <div class="card p-6 rounded-lg text-center">
+                    <h4 class="text-xl font-semibold text-indigo-400 mb-4">Months 3-4</h4>
+                    <p class="text-gray-300">Core Finance & Early AI: Financial markets, derivatives, and ML foundations.</p>
+                </div>
+                <div class="card p-6 rounded-lg text-center">
+                    <h4 class="text-xl font-semibold text-indigo-400 mb-4">Months 5-6</h4>
+                    <p class="text-gray-300">Advanced AI & Integration: Deep learning and financial ML applications.</p>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <div id="phase2" class="curriculum-tab-content">
-                <h3 class="text-2xl font-semibold text-[#4A5568] my-4">Phase 2: Applied Specialization (Months 3-4)</h3>
-                <p class="mb-4 text-gray-700">This phase bridges foundational knowledge with specific, high-value financial applications, emphasizing practical project experience with real or simulated financial data.</p>
-                 <div class="space-y-4">
-                    <div class="card bg-white p-4 rounded-lg shadow-md">
-                        <button class="card-toggle w-full text-left font-semibold text-lg text-[#8B4513] flex justify-between items-center">
-                            <span>Module 5: Machine Learning & Deep Learning Fundamentals for Financial Data</span> <span class="arrow text-2xl">&#9662;</span>
-                        </button>
-                        <div class="card-content mt-2 text-gray-700">
-                            <p><strong>Key Topics:</strong> ML Paradigms (Supervised, Unsupervised, Reinforcement), Classical ML Algorithms (Regression, Decision Trees), Deep Learning Architectures (ANN, CNN, RNN/LSTM), Model Evaluation, Financial Data Handling.</p>
-                            <p><strong>Learning Objective:</strong> Provide the core AI/ML toolkit to select, build, and evaluate models for financial prediction and analysis.</p>
-                        </div>
-                    </div>
-                    <div class="card bg-white p-4 rounded-lg shadow-md">
-                        <button class="card-toggle w-full text-left font-semibold text-lg text-[#8B4513] flex justify-between items-center">
-                            <span>Module 6: Advanced AI Applications in Quantitative Finance (Part 1 - Trading & Forecasting)</span> <span class="arrow text-2xl">&#9662;</span>
-                        </button>
-                        <div class="card-content mt-2 text-gray-700">
-                            <p><strong>Algorithmic Trading & Reinforcement Learning:</strong> RL Fundamentals, RL Algorithms (DQN), Simulation & Backtesting (Zipline, PyAlgoTrade).</p>
-                            <p><strong>Financial Time Series Forecasting:</strong> Advanced DL Architectures (CNN-LSTM, Transformers), Probabilistic Forecasting, Feature Engineering.</p>
-                            <p><strong>Learning Objective:</strong> Delve into specialized AI for algorithmic trading and advanced time series forecasting.</p>
-                        </div>
-                    </div>
-                     <div class="card bg-white p-4 rounded-lg shadow-md">
-                        <button class="card-toggle w-full text-left font-semibold text-lg text-[#8B4513] flex justify-between items-center">
-                            <span>Module 6: Advanced AI Applications in Quantitative Finance (Part 2 - NLP)</span> <span class="arrow text-2xl">&#9662;</span>
-                        </button>
-                        <div class="card-content mt-2 text-gray-700">
-                             <p><strong>Natural Language Processing for Market Sentiment:</strong> Sentiment Analysis Techniques, Data Sources (news, social media), Applications in prediction/risk, Contextualization.</p>
-                             <p><strong>Learning Objective:</strong> Cover NLP techniques to extract and analyze sentiment from textual data for market insights.</p>
-                        </div>
-                    </div>
+    <!-- Phases Section -->
+    <section id="phases" class="py-20 section">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h3 class="text-4xl font-bold text-center text-white mb-12">Learning Phases</h3>
+            <div class="space-y-12">
+                <div class="card p-8 rounded-lg">
+                    <h4 class="text-2xl font-semibold text-indigo-400 mb-4">Phase 1: Foundational Mathematics</h4>
+                    <p class="text-gray-300 mb-4">
+                        Build a robust mathematical toolkit with Linear Algebra, Calculus, and Probability & Statistics. Learn to implement concepts like Gaussian elimination and gradient descent in Python.
+                    </p>
+                    <p class="text-gray-400 italic">Resources: Strang’s “Introduction to Linear Algebra,” Khan Academy, Coursera’s Mathematics for ML.</p>
+                </div>
+                <div class="card p-8 rounded-lg">
+                    <h4 class="text-2xl font-semibold text-indigo-400 mb-4">Phase 2: Core Finance & AI Foundations</h4>
+                    <p class="text-gray-300 mb-4">
+                        Dive into financial markets, derivatives, and Python-based financial modeling. Begin exploring machine learning with probability and statistics tailored for AI.
+                    </p>
+                    <p class="text-gray-400 italic">Resources: Fabozzi’s “Foundations of Financial Markets,” Hull’s “Options, Futures,” Hilpisch’s “Python for Finance.”</p>
+                </div>
+                <div class="card p-8 rounded-lg">
+                    <h4 class="text-2xl font-semibold text-indigo-400 mb-4">Phase 3: Advanced AI & Financial Integration</h4>
+                    <p class="text-gray-300 mb-4">
+                        Master supervised/unsupervised learning, neural networks, and apply them to financial problems like algorithmic trading and risk management.
+                    </p>
+                    <p class="text-gray-400 italic">Resources: Ng’s “Deep Learning Specialization,” Lopez de Prado’s “Advances in Financial Machine Learning.”</p>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <div id="phase3" class="curriculum-tab-content">
-                <h3 class="text-2xl font-semibold text-[#4A5568] my-4">Phase 3: Capstone Project & Integration (Months 5-6)</h3>
-                <p class="mb-4 text-gray-700">This culminating phase consolidates all learned knowledge through a comprehensive capstone project, explores cutting-edge Generative AI, and deeply addresses ethical AI, XAI, and regulatory compliance.</p>
-                 <div class="space-y-4">
-                     <div class="card bg-white p-4 rounded-lg shadow-md">
-                        <button class="card-toggle w-full text-left font-semibold text-lg text-[#8B4513] flex justify-between items-center">
-                            <span>Module 7 (Implicit): Generative AI in FinTech (Integrated into Capstone & Ethics)</span> <span class="arrow text-2xl">&#9662;</span>
-                        </button>
-                        <div class="card-content mt-2 text-gray-700">
-                            <p><strong>Key Topics:</strong> LLM Fundamentals, Fine-tuning, RAG, Applications (Chatbots, Automated Financial Analysis), Cost Considerations.</p>
-                            <p><strong>Learning Objective:</strong> Understand and apply Generative AI models to FinTech use cases.</p>
-                        </div>
-                    </div>
-                    <div class="card bg-white p-4 rounded-lg shadow-md">
-                        <button class="card-toggle w-full text-left font-semibold text-lg text-[#8B4513] flex justify-between items-center">
-                            <span>Module 8: Python Mastery for Quantitative Finance & AI Development</span> <span class="arrow text-2xl">&#9662;</span>
-                        </button>
-                        <div class="card-content mt-2 text-gray-700">
-                             <p><strong>Key Topics:</strong> Deep dive into NumPy, Pandas, TA-Lib, Zipline, PyAlgoTrade, TensorFlow, PyTorch, Scikit-Learn, Keras, NLTK/Hugging Face. Performance optimization.</p>
-                             <p><strong>Learning Objective:</strong> Ensure practical coding skills and toolset to translate concepts into working financial AI systems.</p>
-                        </div>
-                    </div>
-                    <div class="card bg-white p-4 rounded-lg shadow-md">
-                        <button class="card-toggle w-full text-left font-semibold text-lg text-[#8B4513] flex justify-between items-center">
-                            <span>Module 9: Ethical AI, Explainability (XAI) & Regulatory Compliance</span> <span class="arrow text-2xl">&#9662;</span>
-                        </button>
-                        <div class="card-content mt-2 text-gray-700">
-                            <p><strong>Key Topics:</strong> Ethical Challenges (Algorithmic Bias, Data Privacy), XAI Techniques (SHAP), Regulatory Landscape (RegTech, AML), Responsible AI Adoption.</p>
-                            <p><strong>Learning Objective:</strong> Develop a strong understanding of societal, ethical, and legal implications of AI in finance.</p>
-                        </div>
-                    </div>
-                    <div class="card bg-white p-4 rounded-lg shadow-md">
-                        <button class="card-toggle w-full text-left font-semibold text-lg text-[#8B4513] flex justify-between items-center">
-                            <span>Capstone Project: End-to-End Financial AI Application</span> <span class="arrow text-2xl">&#9662;</span>
-                        </button>
-                        <div class="card-content mt-2 text-gray-700">
-                            <p><strong>Activity:</strong> Design, implement, and evaluate a comprehensive financial AI project (e.g., fraud detection, portfolio optimization, market forecasting). This involves leveraging all prior modules and demonstrating integrated learning.</p>
-                            <p><strong>Learning Objective:</strong> Consolidate knowledge and skills into a tangible portfolio piece showcasing ability to solve complex financial problems.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="core-pillars" class="content-section pt-8">
-            <h2 class="text-3xl font-bold text-[#8B4513] mb-6 text-center">Core Pillars of Study</h2>
-            <p class="text-center mb-6 text-md text-gray-700">This program is built on several core pillars that provide the necessary knowledge and skills. Explore each pillar to understand its components and importance.</p>
-             <div class="grid md:grid-cols-2 gap-6">
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold text-[#8B4513] mb-3">Foundational Mathematics (Modules 1-4)</h3>
-                    <p class="text-gray-700 mb-2">Covers Linear Algebra, Calculus, Probability & Statistics, and Stochastic Processes. Essential for understanding AI algorithms and financial modeling.</p>
-                    <ul class="list-disc list-inside text-sm text-gray-600">
-                        <li>Data representation and manipulation.</li>
-                        <li>Optimization techniques for model training.</li>
-                        <li>Risk quantification and prediction under uncertainty.</li>
-                        <li>Modeling dynamic market behavior.</li>
-                    </ul>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold text-[#8B4513] mb-3">AI & Machine Learning (Modules 5-6)</h3>
-                    <p class="text-gray-700 mb-2">Focuses on ML/DL fundamentals and advanced applications like algorithmic trading, time series forecasting, and NLP for sentiment analysis.</p>
-                     <ul class="list-disc list-inside text-sm text-gray-600">
-                        <li>Building and evaluating predictive models.</li>
-                        <li>Developing automated trading strategies.</li>
-                        <li>Forecasting market movements.</li>
-                        <li>Extracting insights from financial text.</li>
-                    </ul>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold text-[#8B4513] mb-3">Python & Practical Tools (Module 8)</h3>
-                    <p class="text-gray-700 mb-2">Emphasizes mastery of Python and key libraries (NumPy, Pandas, Scikit-Learn, TensorFlow, PyTorch, etc.) for quant finance and AI development.</p>
-                    <ul class="list-disc list-inside text-sm text-gray-600">
-                        <li>Efficient numerical computation and data analysis.</li>
-                        <li>Implementing technical indicators and backtesting.</li>
-                        <li>Building and deploying AI/ML models.</li>
-                        <li>Optimizing code for performance.</li>
-                    </ul>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold text-[#8B4513] mb-3">Ethics, XAI & Compliance (Module 9)</h3>
-                    <p class="text-gray-700 mb-2">Addresses critical aspects of responsible AI development, including algorithmic bias, data privacy, model interpretability (XAI), and regulatory requirements.</p>
-                    <ul class="list-disc list-inside text-sm text-gray-600">
-                        <li>Identifying and mitigating ethical challenges.</li>
-                        <li>Making AI models transparent and understandable.</li>
-                        <li>Navigating the financial regulatory landscape.</li>
-                        <li>Ensuring responsible AI adoption.</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="mt-8 bg-white p-6 rounded-lg shadow-md">
-                <h3 class="text-2xl font-semibold text-[#8B4513] mb-4">Advanced AI/ML Models & Techniques in Quantitative Finance</h3>
-                <p class="text-sm text-gray-700 mb-4">The table below summarizes key AI/ML model categories, specific algorithms, their core concepts, primary financial applications, and relevant Python libraries used throughout the program. This provides a quick reference to the technical toolkit you will develop.</p>
-                <div class="table-container">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-100">
-                            <tr>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Category</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Models/Algorithms</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Key Concepts</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Financial Applications</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Python Libraries</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200 text-sm">
-                            <tr>
-                                <td class="px-4 py-3">Predictive Analytics</td>
-                                <td class="px-4 py-3">Linear/Logistic Regression, Decision Trees, Random Forests</td>
-                                <td class="px-4 py-3">Optimization, Classification, Regression, Feature Importance</td>
-                                <td class="px-4 py-3">Stock Prediction, Loan Default, Credit Scoring, Fraud Detection</td>
-                                <td class="px-4 py-3">Scikit-Learn, Pandas, NumPy</td>
-                            </tr>
-                            <tr>
-                                <td class="px-4 py-3">Deep Learning for Time Series</td>
-                                <td class="px-4 py-3">LSTMs, GRUs, CNN-LSTM Ensembles, Transformers (Autoformer, TFT)</td>
-                                <td class="px-4 py-3">Sequential Data, Long-Term Dependencies, Pattern Recognition, Attention</td>
-                                <td class="px-4 py-3">Market Forecasting, Algorithmic Trading Signals</td>
-                                <td class="px-4 py-3">TensorFlow, PyTorch, Keras</td>
-                            </tr>
-                            <tr>
-                                <td class="px-4 py-3">Reinforcement Learning</td>
-                                <td class="px-4 py-3">Deep Q-Networks (DQN), Policy Gradients</td>
-                                <td class="px-4 py-3">Optimal Policies, Reward Maximization, Agent-Environment Interaction</td>
-                                <td class="px-4 py-3">Algorithmic Trading, Portfolio Optimization, Best Execution</td>
-                                <td class="px-4 py-3">OpenAI Gym, Zipline, Stable Baselines3</td>
-                            </tr>
-                            <tr>
-                                <td class="px-4 py-3">Natural Language Processing</td>
-                                <td class="px-4 py-3">Sentiment Analysis (Lexicon, ML, LLM), Topic Modeling</td>
-                                <td class="px-4 py-3">Textual Analysis, Contextual Understanding, Feature Extraction</td>
-                                <td class="px-4 py-3">Market Sentiment, Investment Research, Earnings Call Analysis</td>
-                                <td class="px-4 py-3">NLTK, spaCy, Hugging Face Transformers</td>
-                            </tr>
-                             <tr>
-                                <td class="px-4 py-3">Dimensionality Reduction</td>
-                                <td class="px-4 py-3">PCA, SVD</td>
-                                <td class="px-4 py-3">Data Compression, Feature Engineering, Noise Reduction</td>
-                                <td class="px-4 py-3">Risk Management, Portfolio Optimization, Data Preprocessing</td>
-                                <td class="px-4 py-3">Scikit-Learn, NumPy</td>
-                            </tr>
-                             <tr>
-                                <td class="px-4 py-3">Optimization Techniques</td>
-                                <td class="px-4 py-3">Gradient Descent, Lagrange Multipliers, Dynamic Programming</td>
-                                <td class="px-4 py-3">Loss Minimization, Constraint Handling, Decision Making</td>
-                                <td class="px-4 py-3">Portfolio Optimization, Algorithmic Trading Execution</td>
-                                <td class="px-4 py-3">SciPy, CVXPY</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <section id="resources" class="content-section pt-8">
-            <h2 class="text-3xl font-bold text-[#8B4513] mb-6 text-center">Curated Learning Resources</h2>
-            <p class="text-center mb-6 text-md text-gray-700">A selection of online specializations, courses, books, and academic papers to guide your self-directed learning journey. These resources are chosen to complement the curriculum phases.</p>
-            <div class="space-y-6">
-                <div>
-                    <h3 class="text-xl font-semibold text-[#4A5568] mb-3">Recommended Online Specializations & Courses</h3>
-                    <ul class="list-disc list-inside space-y-2 bg-white p-4 rounded-lg shadow">
-                        <li><strong>DeepLearning.AI: Mathematics for Machine Learning and Data Science Specialization (Coursera):</strong> Core math toolkit.</li>
-                        <li><strong>MITx: Mathematical Methods for Quantitative Finance (edX):</strong> Advanced math for quant finance.</li>
-                        <li><strong>ColumbiaX: Essential Math for AI (edX):</strong> Self-paced refresher in stats, linear algebra, multivariable calculus, and probability.</li>
-                        <li><strong>Columbia Business School: AI for Business & Finance Certificate Program (Wall Street Prep):</strong> ML, predictive analytics, GenAI in finance.</li>
-                        <li><strong>CFI: AI for Finance Specialization:</strong> Practical AI integration in finance workflows.</li>
-                        <li><strong>Coursera: Machine Learning for Trading Specialization:</strong> ML for financial trading.</li>
-                        <li><strong>University of Pennsylvania: Fintech: Foundations & Applications (Coursera):</strong> Broad FinTech overview.</li>
-                        <li><strong>MITx: Derivatives Markets: Advanced Modeling and Strategies (edX):</strong> Sophisticated understanding of valuation methods, risk hedging.</li>
-                        <li><strong>Columbia University: Financial Engineering and Risk Management (Coursera):</strong> Portfolio management, derivatives, financial markets, mathematical modeling.</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-xl font-semibold text-[#4A5568] mb-3">Recommended Books for Practitioners</h3>
-                     <ul class="list-disc list-inside space-y-2 bg-white p-4 rounded-lg shadow">
-                        <li><em>An Introduction to Machine Learning in Quantitative Finance</em> by Ni, Dong, Zheng, Yu</li>
-                        <li><em>Machine Learning: An Applied Mathematics Introduction</em> by Paul Wilmott</li>
-                        <li><em>The Elements of Statistical Learning</em> by Hastie, Tibshirani, and Friedman</li>
-                        <li><em>Handbook of Quantitative Finance and Risk Management</em> by Cheng-Few Lee, John Lee</li>
-                    </ul>
-                </div>
-                 <div>
-                    <h3 class="text-xl font-semibold text-[#4A5568] mb-3">Key Academic Papers (Deeper Dives)</h3>
-                     <ul class="list-disc list-inside space-y-2 bg-white p-4 rounded-lg shadow">
-                        <li>Reinforcement Learning in Algorithmic Trading (Surveys & Applications)</li>
-                        <li>Deep Learning for Financial Time Series Forecasting (Ensembles & Transformers)</li>
-                        <li>NLP for Financial Sentiment Analysis (Scope & Techniques)</li>
-                        <li>Ethical AI & Explainable AI (XAI) in Finance (Frameworks & Reviews)</li>
-                    </ul>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-2xl font-semibold text-[#8B4513] mb-4">Key Python Libraries for Quantitative Finance & AI</h3>
-                    <p class="text-sm text-gray-700 mb-4">This table highlights essential Python libraries you will master, detailing their primary purpose and financial relevance. Proficiency in these tools is critical for practical implementation.</p>
-                    <div class="table-container">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-100">
-                                <tr>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Library Name</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Primary Purpose</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Key Features/Financial Relevance</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200 text-sm">
-                                <tr><td class="px-4 py-3">NumPy</td><td class="px-4 py-3">Numerical Operations</td><td class="px-4 py-3">High-performance arrays for math/stats.</td></tr>
-                                <tr><td class="px-4 py-3">Pandas</td><td class="px-4 py-3">Data Manipulation & Analysis</td><td class="px-4 py-3">Handling structured data, time series (OHLC).</td></tr>
-                                <tr><td class="px-4 py-3">TA-Lib</td><td class="px-4 py-3">Technical Analysis</td><td class="px-4 py-3">150+ technical indicators (RSI, MACD).</td></tr>
-                                <tr><td class="px-4 py-3">Zipline</td><td class="px-4 py-3">Algorithmic Trading & Backtesting</td><td class="px-4 py-3">Event-driven backtesting engine.</td></tr>
-                                <tr><td class="px-4 py-3">PyAlgoTrade</td><td class="px-4 py-3">Event-driven Backtesting & Trading</td><td class="px-4 py-3">Lightweight backtesting, intraday strategies.</td></tr>
-                                <tr><td class="px-4 py-3">TensorFlow</td><td class="px-4 py-3">Deep Learning</td><td class="px-4 py-3">Large-scale AI, predictive analytics.</td></tr>
-                                <tr><td class="px-4 py-3">PyTorch</td><td class="px-4 py-3">Deep Learning</td><td class="px-4 py-3">Flexible, research-favored, NLP/CV.</td></tr>
-                                <tr><td class="px-4 py-3">Scikit-Learn</td><td class="px-4 py-3">General Machine Learning</td><td class="px-4 py-3">Fast for structured data, small/medium projects.</td></tr>
-                                <tr><td class="px-4 py-3">Keras</td><td class="px-4 py-3">Deep Learning API</td><td class="px-4 py-3">Simplifies DL model building (on TensorFlow).</td></tr>
-                                <tr><td class="px-4 py-3">NLTK</td><td class="px-4 py-3">Natural Language Processing</td><td class="px-4 py-3">Text processing, sentiment analysis.</td></tr>
-                                <tr><td class="px-4 py-3">XGBoost/LightGBM</td><td class="px-4 py-3">Gradient Boosting</td><td class="px-4 py-3">Efficient for structured data, fraud detection.</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="careers" class="content-section pt-8">
-            <h2 class="text-3xl font-bold text-[#8B4513] mb-6 text-center">Career Trajectories & Continuous Growth</h2>
-            <p class="text-center mb-6 text-md text-gray-700">Completing this program equips you with a highly sought-after multidisciplinary skillset, opening doors to various specialized roles in quantitative finance and FinTech. Continuous learning is key for long-term success.</p>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold text-[#4A5568] mb-2">Quant Developer</h3>
-                    <p class="text-sm text-gray-600">Designs, develops, and deploys software solutions for financial institutions. Strong coding (Python, C++), math, and data analysis skills required.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold text-[#4A5568] mb-2">Quantitative Researcher</h3>
-                    <p class="text-sm text-gray-600">Uses statistical methods to analyze markets and develop investment strategies. Involves mathematical modeling and programming.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold text-[#4A5568] mb-2">Quantitative Risk Manager</h3>
-                    <p class="text-sm text-gray-600">Develops risk model frameworks using VaR, Monte Carlo simulations, and statistical models.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold text-[#4A5568] mb-2">Portfolio Manager (Quant PM)</h3>
-                    <p class="text-sm text-gray-600">Applies quantitative techniques for portfolio construction, asset exposure monitoring, and strategy optimization.</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold text-[#4A5568] mb-2">Algorithmic Trader</h3>
-                    <p class="text-sm text-gray-600">Leverages AI-driven algorithms for rapid buy/sell decisions, analyzing live trading data.</p>
-                </div>
-            </div>
-             <div class="mt-8 bg-white p-6 rounded-lg shadow-md">
-                <h3 class="text-xl font-semibold text-[#4A5568] mb-2">Continuous Learning</h3>
-                <p class="text-sm text-gray-700">The FinTech landscape evolves rapidly. This program is a launchpad. Commit to staying updated with new research, tools, and regulations to maintain competitiveness. Build a strong portfolio of applied projects.</p>
-            </div>
-        </section>
-
-        <section id="weekly-plan" class="content-section pt-8">
-            <h2 class="text-3xl font-bold text-[#8B4513] mb-6 text-center">Sample 6-Month Curriculum Breakdown (Weekly Focus)</h2>
-            <p class="text-center mb-6 text-md text-gray-700">This table provides a detailed week-by-week roadmap, breaking down the 6-month program into manageable learning chunks. It outlines core topics, key concepts, example resources, and estimated weekly hours. Use this as a guide to structure your intensive study. Note that hours are estimates and can vary based on your pace and depth of exploration.</p>
-            <div class="bg-white p-2 sm:p-4 md:p-6 rounded-lg shadow-md table-container">
-                <table class="min-w-full divide-y divide-gray-300">
-                    <thead class="bg-gray-100 sticky top-0">
-                        <tr>
-                            <th class="px-2 sm:px-3 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Week</th>
-                            <th class="px-2 sm:px-3 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Phase</th>
-                            <th class="px-2 sm:px-3 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Core Topics</th>
-                            <th class="px-2 sm:px-3 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Key Concepts/Skills</th>
-                            <th class="px-2 sm:px-3 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Resources (Examples)</th>
-                            <th class="px-2 sm:px-3 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Est. Hours/Wk</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200 text-xs sm:text-sm">
-                        <tr><td colspan="6" class="px-2 sm:px-3 py-2 font-bold bg-amber-50">Month 1: Foundational Immersion (15-20 hrs/wk)</td></tr>
-                        <tr><td class="px-2 sm:px-3 py-2">1-2</td><td class="px-2 sm:px-3 py-2">P1</td><td class="px-2 sm:px-3 py-2">Linear Algebra for ML & Data Science</td><td class="px-2 sm:px-3 py-2">Vectors, Matrices, Ops, PCA</td><td class="px-2 sm:px-3 py-2"><strong>Courses:</strong> DeepLearning.AI Math Spec. C1, MITx Quant Finance. <strong>Books:</strong> "Elements of Statistical Learning" (Ch. 3), "ML: Applied Math Intro" (Ch. 2).</td><td class="px-2 sm:px-3 py-2">15-20</td></tr>
-                        <tr><td class="px-2 sm:px-3 py-2">3-4</td><td class="px-2 sm:px-3 py-2">P1</td><td class="px-2 sm:px-3 py-2">Calculus for ML & Data Science</td><td class="px-2 sm:px-3 py-2">Derivatives, Gradient Descent, Chain Rule, Multivariate Calculus, Optimization</td><td class="px-2 sm:px-3 py-2"><strong>Courses:</strong> DeepLearning.AI Math Spec. C2, MITx Quant Finance. <strong>Books:</strong> "Elements of Statistical Learning" (Ch. 10), "ML: Applied Math Intro" (Ch. 3).</td><td class="px-2 sm:px-3 py-2">15-20</td></tr>
-                        <tr><td colspan="6" class="px-2 sm:px-3 py-2 font-bold bg-amber-50">Month 2: Foundational Immersion (15-20 hrs/wk)</td></tr>
-                        <tr><td class="px-2 sm:px-3 py-2">5-6</td><td class="px-2 sm:px-3 py-2">P1</td><td class="px-2 sm:px-3 py-2">Probability & Statistics for ML & Data Science</td><td class="px-2 sm:px-3 py-2">Random Variables, Distributions, Statistical Inference, Hypothesis Testing, MLE, Bayesian Inference</td><td class="px-2 sm:px-3 py-2"><strong>Courses:</strong> DeepLearning.AI Math Spec. C3, MITx Quant Finance. <strong>Books:</strong> "Elements of Statistical Learning" (Ch. 2), "ML: Applied Math Intro" (Ch. 4).</td><td class="px-2 sm:px-3 py-2">15-20</td></tr>
-                        <tr><td class="px-2 sm:px-3 py-2">7-8</td><td class="px-2 sm:px-3 py-2">P1</td><td class="px-2 sm:px-3 py-2">Introduction to Stochastic Processes & Advanced Math for Finance</td><td class="px-2 sm:px-3 py-2">Random Walks, ARMA, GARCH, Brownian Motion, Itô Calculus, Monte Carlo Simulation</td><td class="px-2 sm:px-3 py-2"><strong>Courses:</strong> MITx Quant Finance, Caltech: Pricing Options, Columbia Financial Engineering. <strong>Books:</strong> "Handbook of Quant Finance" (Part II).</td><td class="px-2 sm:px-3 py-2">15-20</td></tr>
-                        <tr><td colspan="6" class="px-2 sm:px-3 py-2 font-bold bg-amber-50">Month 3: Applied Specialization (20-25 hrs/wk)</td></tr>
-                        <tr><td class="px-2 sm:px-3 py-2">9-10</td><td class="px-2 sm:px-3 py-2">P2</td><td class="px-2 sm:px-3 py-2">ML & Deep Learning Fundamentals for Financial Data</td><td class="px-2 sm:px-3 py-2">Supervised/Unsupervised Learning, Regression, Classification, Neural Networks (ANN, CNN, RNN/LSTM), Model Validation, Overfitting</td><td class="px-2 sm:px-3 py-2"><strong>Courses:</strong> Columbia AI for Business & Finance. <strong>Books:</strong> "Intro to ML in Quant Finance" (Ch. 1-4), "Elements of Statistical Learning" (Ch. 4-7).</td><td class="px-2 sm:px-3 py-2">20-25</td></tr>
-                        <tr><td class="px-2 sm:px-3 py-2">11-12</td><td class="px-2 sm:px-3 py-2">P2</td><td class="px-2 sm:px-3 py-2">Algorithmic Trading & Reinforcement Learning</td><td class="px-2 sm:px-3 py-2">RL Fundamentals (States, Actions, Rewards), DQN, Trading Environments, Backtesting</td><td class="px-2 sm:px-3 py-2"><strong>Courses:</strong> Coursera ML for Trading. <strong>Papers:</strong> "Reinforcement Learning in Algorithmic Trading: A Survey", "Application of Deep RL to Algorithmic Trading".</td><td class="px-2 sm:px-3 py-2">20-25</td></tr>
-                        <tr><td colspan="6" class="px-2 sm:px-3 py-2 font-bold bg-amber-50">Month 4: Applied Specialization (20-25 hrs/wk)</td></tr>
-                        <tr><td class="px-2 sm:px-3 py-2">13-14</td><td class="px-2 sm:px-3 py-2">P2</td><td class="px-2 sm:px-3 py-2">Financial Time Series Forecasting</td><td class="px-2 sm:px-3 py-2">LSTMs, CNN-LSTM Ensembles, Transformer Models (Autoformer, TFT), Probabilistic Forecasting</td><td class="px-2 sm:px-3 py-2"><strong>Books:</strong> "Intro to ML in Quant Finance" (Ch. 5). <strong>Papers:</strong> "Financial Time Series Forecasting with the Deep Learning Ensemble", "DL Architectures for Time Series Forecasting".</td><td class="px-2 sm:px-3 py-2">20-25</td></tr>
-                        <tr><td class="px-2 sm:px-3 py-2">15-16</td><td class="px-2 sm:px-3 py-2">P2</td><td class="px-2 sm:px-3 py-2">Natural Language Processing for Market Sentiment</td><td class="px-2 sm:px-3 py-2">Sentiment Analysis Techniques, Data Sources (news, social media), Market-Driven Labels, Contextual Factors</td><td class="px-2 sm:px-3 py-2"><strong>Books:</strong> "Intro to ML in Quant Finance" (Ch. 6). <strong>Papers:</strong> "Financial Sentiment Analysis Scope", "NLP for sentiment analysis in financial markets".</td><td class="px-2 sm:px-3 py-2">20-25</td></tr>
-                        <tr><td colspan="6" class="px-2 sm:px-3 py-2 font-bold bg-amber-50">Month 5: Capstone Project & Integration (25-30 hrs/wk)</td></tr>
-                        <tr><td class="px-2 sm:px-3 py-2">17-18</td><td class="px-2 sm:px-3 py-2">P3</td><td class="px-2 sm:px-3 py-2">Generative AI in FinTech</td><td class="px-2 sm:px-3 py-2">LLM Fundamentals, Fine-tuning, RAG, Chatbots, Automated Financial Analysis, Cost Considerations</td><td class="px-2 sm:px-3 py-2"><strong>Courses:</strong> Columbia AI for Business & Finance, CFI AI for Finance.</td><td class="px-2 sm:px-3 py-2">25-30</td></tr>
-                        <tr><td class="px-2 sm:px-3 py-2">19-20</td><td class="px-2 sm:px-3 py-2">P3</td><td class="px-2 sm:px-3 py-2">Ethical AI, Explainability (XAI) & Regulatory Compliance</td><td class="px-2 sm:px-3 py-2">Algorithmic Bias, Data Privacy, Transparency, Accountability, XAI Techniques (SHAP), RegTech</td><td class="px-2 sm:px-3 py-2"><strong>Papers:</strong> "Ethical AI in Finance", "Explaining the Unexplainable: XAI in Finance".</td><td class="px-2 sm:px-3 py-2">25-30</td></tr>
-                        <tr><td colspan="6" class="px-2 sm:px-3 py-2 font-bold bg-amber-50">Month 6: Capstone Project & Integration (25-30 hrs/wk)</td></tr>
-                        <tr><td class="px-2 sm:px-3 py-2">21-24</td><td class="px-2 sm:px-3 py-2">P3</td><td class="px-2 sm:px-3 py-2">Capstone Project: Financial AI App</td><td class="px-2 sm:px-3 py-2">Design, Dev, Eval, Deploy Considerations</td><td class="px-2 sm:px-3 py-2">Self-directed, leveraging all prior modules. Focus on a real-world problem (e.g., fraud detection, portfolio optimization, trading strategy).</td><td class="px-2 sm:px-3 py-2">25-30</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-    </main>
-
-    <footer class="bg-[#8B4513] text-white mt-12 py-8 text-center">
-        <p class="text-sm">&copy; 2024 Accelerated Quant Finance & AI Program Explorer. Inspired by the comprehensive report.</p>
-        <p class="text-xs mt-1">This is a conceptual application for exploring the learning pathway.</p>
+    <!-- Footer -->
+    <footer class="py-12 bg-gray-900 text-center">
+        <p class="text-gray-400">Designed for ambitious software developers. Start your journey today.</p>
+        <p class="text-gray-500 mt-2">&copy; 2025 Interdisciplinary Curriculum. All rights reserved.</p>
     </footer>
 
     <script>
-        const navLinks = document.querySelectorAll('.nav-link');
-        const contentSections = document.querySelectorAll('.content-section');
-        const curriculumTabButtons = document.querySelectorAll('.curriculum-tab-button');
-        const curriculumTabContents = document.querySelectorAll('.curriculum-tab-content');
-        const cardToggles = document.querySelectorAll('.card-toggle');
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        function setActiveSection(hash) {
-            contentSections.forEach(section => {
-                if ('#' + section.id === hash) {
-                    section.classList.add('active');
-                } else {
-                    section.classList.remove('active');
-                }
-            });
-        }
-        
-        // Initial section activation based on hash or default to #overview
-        if (window.location.hash) {
-            setActiveSection(window.location.hash);
-        } else {
-            setActiveSection('#overview');
-        }
-
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                // e.preventDefault(); // Prevent default if it's a real link
-                const targetId = link.getAttribute('href');
-                setActiveSection(targetId);
-                // For mobile menu, close it after click
-                if (mobileMenu.classList.contains('block')) {
-                    mobileMenu.classList.remove('block');
-                    mobileMenu.classList.add('hidden');
-                    mobileMenuButton.querySelector('svg.block').classList.remove('hidden');
-                    mobileMenuButton.querySelector('svg.hidden').classList.add('hidden');
-                }
-                // Smooth scroll to section
-                document.querySelector(targetId).scrollIntoView({ behavior: 'smooth' });
-
-            });
-        });
-        
-        // Handle hash changes for back/forward navigation
-        window.addEventListener('hashchange', () => {
-            setActiveSection(window.location.hash);
-        });
-
-        curriculumTabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const tabId = button.dataset.tab;
-
-                curriculumTabButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-
-                curriculumTabContents.forEach(content => {
-                    if (content.id === tabId) {
-                        content.classList.add('active');
-                    } else {
-                        content.classList.remove('active');
-                    }
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
                 });
             });
         });
 
-        cardToggles.forEach(toggle => {
-            toggle.addEventListener('click', () => {
-                const card = toggle.closest('.card');
-                card.classList.toggle('open');
-                const arrow = toggle.querySelector('.arrow');
-                arrow.innerHTML = card.classList.contains('open') ? '&#9652;' : '&#9662;'; // Up/Down arrow
-            });
-        });
-
-        mobileMenuButton.addEventListener('click', () => {
-            const expanded = mobileMenuButton.getAttribute('aria-expanded') === 'true' || false;
-            mobileMenuButton.setAttribute('aria-expanded', !expanded);
-            mobileMenu.classList.toggle('hidden');
-            mobileMenu.classList.toggle('block'); // Use block for visibility
-            mobileMenuButton.querySelector('svg.block').classList.toggle('hidden');
-            mobileMenuButton.querySelector('svg.hidden').classList.toggle('hidden');
-        });
-
-        // Chart.js: Study Hours Chart
-        const weeklyHoursData = {
-            // Month: [Week1, Week2, Week3, Week4] (average if range)
-            'Month 1 (W1-4)': [(15+20)/2, (15+20)/2, (15+20)/2, (15+20)/2], // Avg of 15-20
-            'Month 2 (W5-8)': [(15+20)/2, (15+20)/2, (15+20)/2, (15+20)/2],
-            'Month 3 (W9-12)': [(20+25)/2, (20+25)/2, (20+25)/2, (20+25)/2],
-            'Month 4 (W13-16)': [(20+25)/2, (20+25)/2, (20+25)/2, (20+25)/2],
-            'Month 5 (W17-20)': [(25+30)/2, (25+30)/2, (25+30)/2, (25+30)/2],
-            'Month 6 (W21-24)': [(25+30)/2, (25+30)/2, (25+30)/2, (25+30)/2]
-        };
-
-        const labels = [];
-        const dataPoints = [];
-        Object.entries(weeklyHoursData).forEach(([month, hoursArray]) => {
-            hoursArray.forEach((hours, index) => {
-                const weekMatch = month.match(/\(W(\d+)-(\d+)\)/);
-                if (weekMatch) {
-                    const startWeek = parseInt(weekMatch[1]);
-                    labels.push(`W${startWeek + index}`);
-                } else {
-                     labels.push(`${month} W${index+1}`); // Fallback if regex fails
+        // Fade-in animation for sections
+        const sections = document.querySelectorAll('.section');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
                 }
-                dataPoints.push(hours);
             });
-        });
-        
-        const ctx = document.getElementById('studyHoursChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Estimated Study Hours per Week',
-                    data: dataPoints,
-                    backgroundColor: 'rgba(139, 69, 19, 0.6)', // SaddleBrown with alpha
-                    borderColor: 'rgba(139, 69, 19, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Hours per Week'
-                        }
-                    },
-                    x: {
-                         title: {
-                            display: true,
-                            text: 'Program Week'
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top',
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.dataset.label || '';
-                                if (label) {
-                                    label += ': ';
-                                }
-                                if (context.parsed.y !== null) {
-                                    label += context.parsed.y + ' hrs';
-                                }
-                                return label;
-                            }
-                        }
-                    }
-                }
-            }
-        });
+        }, { threshold: 0.1 });
 
+        sections.forEach(section => observer.observe(section));
     </script>
 </body>
 </html>
