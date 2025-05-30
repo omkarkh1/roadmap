@@ -3,163 +3,642 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interdisciplinary Curriculum: Math, Finance, AI</title>
+    <title>Strategic Roadmap: AI, Math & Finance</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Visualization & Content Choices: 
+        - Report Introduction (Sec 1-3) -> Goal: Inform -> Method: Structured text -> Interaction: None -> Justification: Clear presentation for introductory content. Lib: HTML/Tailwind.
+        - High-Level Roadmap (Sec 4) -> Goal: Inform/Compare Phases -> Method: HTML Table & Chart.js Horizontal Bar Chart for phase durations -> Interaction: Chart tooltips -> Justification: Table for detail, chart for quick visual summary. Lib: HTML/Tailwind, Chart.js.
+        - Detailed Weekly Breakdown (Sec 5) -> Goal: Organize/Inform -> Method: Interactive cards/accordion per month -> Interaction: JS click to show/hide weekly details -> Justification: Manages dense info effectively. Lib: HTML/Tailwind, JS.
+        - Key Learning Resources (Sec 6, App A-C) -> Goal: Organize/Inform -> Method: Tabbed content for Books, Courses, Papers, displayed as cards -> Interaction: JS click for tabs -> Justification: Organizes extensive lists. Lib: HTML/Tailwind, JS.
+        - Tools & Libraries (Sec 8, App D) -> Goal: Inform/Organize -> Method: HTML Table -> Interaction: None -> Justification: Clear display for tabular data. Lib: HTML/Tailwind.
+        - Projects & Milestones (Sec 7) -> Goal: Inform -> Method: Structured text & lists -> Interaction: None -> Justification: Direct presentation of project goals. Lib: HTML/Tailwind.
+        - Continuous Learning & Conclusion (Sec 9-10) -> Goal: Inform/Motivate -> Method: Structured text -> Interaction: None -> Justification: Clear presentation of advice. Lib: HTML/Tailwind.
+        - All numeric citations [X] from the report are preserved in the text.
+    -->
     <style>
-        body {
-            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
-            color: #e2e8f0;
-            font-family: 'Inter', sans-serif;
+        body { font-family: 'Inter', sans-serif; }
+        /* Custom scrollbar for a cleaner look - optional */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px; /* Increased max-width for better display */
+            margin-left: auto;
+            margin-right: auto;
+            height: 250px; /* Adjusted for horizontal bar chart */
+            max-height: 300px;
         }
-        .section {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s ease-out;
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 300px; /* Slightly taller on larger screens */
+            }
         }
-        .section.visible {
-            opacity: 1;
-            transform: translateY(0);
+        .active-nav {
+            background-color: #0369a1; /* sky-700 */
+            color: white;
         }
-        .card {
-            background: rgba(45, 55, 72, 0.8);
-            backdrop-filter: blur(10px);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .content-section {
+            display: none;
         }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        .content-section.active {
+            display: block;
         }
+        .tab-button.active {
+            border-color: #0369a1; /* sky-700 */
+            color: #0369a1;
+            font-weight: 600;
+        }
+        .resource-tab-content {
+            display: none;
+        }
+        .resource-tab-content.active {
+            display: block;
+        }
+        .month-button.active {
+            background-color: #0ea5e9; /* sky-500 */
+            color: white;
+        }
+        .week-details { display: none; }
+        .week-card.expanded .week-details { display: block; }
+
+        /* Adding Inter font */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
     </style>
 </head>
-<body class="min-h-screen">
-    <!-- Navigation -->
-    <nav class="fixed top-0 w-full bg-gray-900 bg-opacity-80 backdrop-blur-md z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-indigo-400">Math, Finance & AI Curriculum</h1>
-            <div class="space-x-4">
-                <a href="#home" class="text-gray-300 hover:text-indigo-400 transition">Home</a>
-                <a href="#overview" class="text-gray-300 hover:text-indigo-400 transition">Overview</a>
-                <a href="#structure" class="text-gray-300 hover:text-indigo-400 transition">Structure</a>
-                <a href="#phases" class="text-gray-300 hover:text-indigo-400 transition">Phases</a>
+<body class="bg-amber-50 text-neutral-800">
+
+    <header class="bg-sky-700 text-white p-4 sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto flex flex-wrap justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold">Developer Skill Augmentation Roadmap</h1>
+            <nav class="mt-2 md:mt-0">
+                <button data-target="introduction" class="nav-button px-3 py-2 rounded-md hover:bg-sky-600 active-nav">Introduction</button>
+                <button data-target="roadmap-plan" class="nav-button px-3 py-2 rounded-md hover:bg-sky-600">Roadmap Plan</button>
+                <button data-target="learning-toolkit" class="nav-button px-3 py-2 rounded-md hover:bg-sky-600">Learning Toolkit</button>
+                <button data-target="projects-growth" class="nav-button px-3 py-2 rounded-md hover:bg-sky-600">Projects & Growth</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8">
+
+        <section id="introduction" class="content-section active space-y-6">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold text-sky-700 mb-3">Welcome to Your Learning Journey</h2>
+                <p class="text-neutral-700 leading-relaxed">
+                    This interactive guide outlines a comprehensive six-month strategic roadmap designed for software developers aiming to enhance their skills in Artificial Intelligence (AI), Mathematics, and Finance. It translates the detailed "Strategic Roadmap for Skill Augmentation" report into an accessible and navigable format. Here, you'll find the core principles, prerequisites, and the overall vision that underpins this intensive learning program.
+                </p>
             </div>
-        </div>
-    </nav>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-sky-700 mb-2">1. Introduction (from Report)</h3>
+                <p class="text-neutral-700 leading-relaxed">The confluence of Artificial Intelligence (AI), Mathematics, and Finance has engendered a paradigm shift across numerous industries, creating a demand for professionals adept in these interdisciplinary domains. For software developers, leveraging existing programming proficiency to acquire expertise in these areas presents a significant opportunity for career advancement and innovation. This document delineates a structured six-month learning roadmap designed to equip a software developer with foundational and applied knowledge in AI, Mathematics, and Finance. The curriculum emphasizes a rigorous understanding of core mathematical principles, practical application of AI and machine learning techniques, and a pertinent overview of financial concepts and markets. The roadmap is structured to build knowledge incrementally, culminating in the ability to tackle complex, integrated problems.</p>
+            </div>
 
-    <!-- Hero Section -->
-    <section id="home" class="min-h-screen flex items-center justify-center pt-16">
-        <div class="text-center max-w-4xl mx-auto px-4">
-            <h2 class="text-5xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
-                Master Math, Finance, and AI in 6 Months
-            </h2>
-            <p class="text-lg md:text-xl text-gray-300 mb-8">
-                A rigorous, interdisciplinary curriculum designed for software developers to unlock the power of mathematics, finance, and artificial intelligence.
-            </p>
-            <a href="#overview" class="inline-block bg-indigo-600 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-indigo-700 transition">
-                Explore the Journey
-            </a>
-        </div>
-    </section>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-sky-700 mb-2">2. Core Philosophy & Approach (from Report)</h3>
+                <p class="text-neutral-700 leading-relaxed mb-2">This roadmap is predicated on the understanding that Mathematics provides the bedrock upon which both AI and modern Quantitative Finance are built. A robust mathematical foundation is, therefore, indispensable for a deep comprehension of AI algorithms and financial models.[1, 2] The approach prioritizes:</p>
+                <ul class="list-disc list-inside space-y-1 text-neutral-700">
+                    <li><strong>Foundational Mathematics:</strong> Commencing with Linear Algebra, Calculus, Probability, and Statistics, as these are integral to understanding machine learning algorithms and financial mathematics.[1, 3, 4]</li>
+                    <li><strong>Practical Artificial Intelligence:</strong> Progressing from fundamental machine learning concepts to deep learning architectures, with an emphasis on hands-on implementation and understanding of model mechanics.[5, 6] The learning path is designed to move from theoretical understanding to practical application using widely adopted frameworks.</li>
+                    <li><strong>Relevant Financial Acumen:</strong> Introducing core concepts of financial markets, investment principles, and quantitative finance, enabling the application of AI and mathematical skills to financial data and problems.[7, 8, 9]</li>
+                    <li><strong>Integrated Learning & Project-Based Application:</strong> Encouraging the synthesis of knowledge from all three domains through practical exercises and culminating in a capstone project. This ensures that theoretical knowledge is translated into tangible skills.</li>
+                </ul>
+                <p class="text-neutral-700 leading-relaxed mt-2">The progression is designed to be intensive, requiring consistent effort and dedication to cover the breadth and depth necessary for meaningful skill acquisition within the six-month timeframe.</p>
+            </div>
 
-    <!-- Overview Section -->
-    <section id="overview" class="py-20 section">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h3 class="text-4xl font-bold text-center text-white mb-12">Why This Curriculum?</h3>
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="card p-6 rounded-lg">
-                    <h4 class="text-2xl font-semibold text-indigo-400 mb-4">Integrated Learning</h4>
-                    <p class="text-gray-300">
-                        Seamlessly blends mathematics, finance, and AI, building a cohesive skillset that empowers you to innovate at their intersection.
-                    </p>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-sky-700 mb-2">3. Prerequisites & Assumptions (from Report)</h3>
+                <p class="text-neutral-700 leading-relaxed mb-2">This roadmap is tailored for individuals with the following background and commitments:</p>
+                <ul class="list-disc list-inside space-y-1 text-neutral-700">
+                    <li><strong>Software Development Experience:</strong> Proficiency in at least one programming language is assumed, with Python being the preferred language due to its extensive libraries and widespread adoption in AI and quantitative finance.[10, 11]</li>
+                    <li><strong>Time Commitment:</strong> A dedicated study time of approximately 15-20 hours per week is anticipated to effectively cover the material and complete the suggested exercises.</li>
+                    <li><strong>Access to Resources:</strong> Consistent access to the internet for online courses, research papers, and software tools is necessary.</li>
+                    <li><strong>Mathematical Aptitude:</strong> While advanced prior mathematical knowledge is not strictly required beyond high school mathematics [12], a willingness to engage with and learn new mathematical concepts is crucial.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="roadmap-plan" class="content-section space-y-6">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold text-sky-700 mb-3">Roadmap Plan</h2>
+                <p class="text-neutral-700 leading-relaxed">
+                    This section details the structure of your six-month learning journey. It begins with a high-level overview of the three main phases and their objectives, followed by a granular weekly breakdown. You can navigate the weekly plan by selecting a month to view the specific topics, resources, and activities scheduled for each week.
+                </p>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-sky-700 mb-4">4. High-Level 6-Month Roadmap Overview (from Report)</h3>
+                <p class="text-neutral-700 leading-relaxed mb-4">The six-month journey is segmented into three distinct phases, each building upon the preceding one to ensure a cohesive learning experience.</p>
+                <div class="chart-container mb-6">
+                    <canvas id="phasesChart"></canvas>
                 </div>
-                <div class="card p-6 rounded-lg">
-                    <h4 class="text-2xl font-semibold text-indigo-400 mb-4">Practical Focus</h4>
-                    <p class="text-gray-300">
-                        Leverages your coding skills with hands-on Python projects, turning abstract concepts into tangible applications.
-                    </p>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 border border-gray-300">
+                        <thead class="bg-sky-100">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-sky-700 uppercase tracking-wider">Phase</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-sky-700 uppercase tracking-wider">Duration (Months)</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-sky-700 uppercase tracking-wider">Focus Areas</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-sky-700 uppercase tracking-wider">Key Outcomes</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap font-medium">Phase 1: Foundational Mathematics</td>
+                                <td class="px-6 py-4 whitespace-nowrap">1-2</td>
+                                <td class="px-6 py-4">Linear Algebra, Single & Multivariate Calculus, Probability & Statistics, Introduction to Optimization</td>
+                                <td class="px-6 py-4">Strong grasp of mathematical concepts underpinning AI and quantitative finance; ability to perform relevant calculations and understand mathematical notation in literature.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap font-medium">Phase 2: Core AI & Introduction to Finance</td>
+                                <td class="px-6 py-4 whitespace-nowrap">3-4</td>
+                                <td class="px-6 py-4">Fundamental Machine Learning (Supervised/Unsupervised), Introduction to Deep Learning, Financial Markets, Investment Principles</td>
+                                <td class="px-6 py-4">Ability to implement and evaluate basic ML models, understand neural network basics, comprehend financial market operations and core investment theories.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap font-medium">Phase 3: Advanced AI, Quantitative Finance & Capstone Integration</td>
+                                <td class="px-6 py-4 whitespace-nowrap">5-6</td>
+                                <td class="px-6 py-4">Advanced Deep Learning (CNNs, RNNs), Introduction to Quantitative Finance, Specialized Topic, Capstone Project</td>
+                                <td class="px-6 py-4">Proficiency in building more complex DL models, applying quantitative methods to financial data, and completing an integrated project demonstrating acquired skills.</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Structure Section -->
-    <section id="structure" class="py-20 bg-gray-800 bg-opacity-50 section">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h3 class="text-4xl font-bold text-center text-white mb-12">Curriculum Structure</h3>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="card p-6 rounded-lg text-center">
-                    <h4 class="text-xl font-semibold text-indigo-400 mb-4">Months 1-2</h4>
-                    <p class="text-gray-300">Foundational Mathematics: Linear Algebra, Calculus, Probability & Statistics.</p>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-sky-700 mb-4">5. Detailed Weekly Breakdown (Months 1-6) (from Report)</h3>
+                <p class="text-neutral-700 leading-relaxed mb-4">Select a month below to view the detailed weekly schedule, including focus areas, specific topics, key resources, suggested activities, and estimated time commitment.</p>
+                <div id="month-selector" class="flex flex-wrap gap-2 mb-6">
+                    </div>
+                <div id="weekly-plan-content" class="space-y-4">
+                    </div>
+            </div>
+        </section>
+
+        <section id="learning-toolkit" class="content-section space-y-6">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold text-sky-700 mb-3">Learning Toolkit</h2>
+                <p class="text-neutral-700 leading-relaxed">
+                    This section is your central hub for all learning materials and tools. It compiles the key resources recommended in the roadmap, including categorized lists of books, online courses, and influential research papers. Additionally, you'll find a comprehensive list of essential Python libraries that are vital for working in AI, Mathematics, and Finance.
+                </p>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-sky-700 mb-4">6. Key Learning Resources (from Report)</h3>
+                <p class="text-neutral-700 leading-relaxed mb-4">This roadmap leverages a combination of online courses, textbooks, research papers, and practical tools. Use the tabs below to explore resources by category.</p>
+                <div class="mb-4 border-b border-gray-200">
+                    <nav class="-mb-px flex space-x-4" aria-label="Tabs">
+                        <button class="resource-tab-button active whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm" data-resource-target="resources-math">Mathematics</button>
+                        <button class="resource-tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300" data-resource-target="resources-ai">Artificial Intelligence</button>
+                        <button class="resource-tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300" data-resource-target="resources-finance">Finance</button>
+                        <button class="resource-tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300" data-resource-target="resources-books">Books (Appendix A)</button>
+                        <button class="resource-tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300" data-resource-target="resources-courses">Courses (Appendix B)</button>
+                        <button class="resource-tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300" data-resource-target="resources-papers">Papers (Appendix C)</button>
+                    </nav>
                 </div>
-                <div class="card p-6 rounded-lg text-center">
-                    <h4 class="text-xl font-semibold text-indigo-400 mb-4">Months 3-4</h4>
-                    <p class="text-gray-300">Core Finance & Early AI: Financial markets, derivatives, and ML foundations.</p>
+
+                <div id="resources-math" class="resource-tab-content active space-y-3">
+                    <h4 class="text-lg font-semibold text-sky-600">6.1. Mathematics</h4>
+                    <p><strong>Linear Algebra:</strong> Online courses such as "Introductory Linear Algebra" (GTx on edX) [1] and "Mathematics for Machine Learning: Linear Algebra" (Imperial College London on Coursera). Standard textbooks like Gilbert Strang's "Introduction to Linear Algebra."</p>
+                    <p><strong>Calculus:</strong> Online courses like "Mathematics for Machine Learning: Multivariate Calculus" (Imperial College London on Coursera) [3] and "Introduction to Calculus" (University of Sydney on Coursera).[3] Books such as "Calculus For Dummies" [15] for an accessible start, and "Machine Learning Calculus Practice Problems Workbook" [16] for applied exercises.</p>
+                    <p><strong>Probability & Statistics:</strong> Online courses such as "Probability & Statistics for Machine Learning & Data Science" (DeepLearning.AI on Coursera) [4] and "Statistics for Data Science with Python" (IBM on Coursera).[4] Textbooks like "A First Course in Probability" by Sheldon Ross.[17]</p>
+                    <p><strong>Optimization:</strong> Content integrated within machine learning courses and textbooks like "Deep Learning" by Goodfellow, Bengio, and Courville.[15] Specialized texts include "Algorithms for Optimization" by Kochenderfer and Wheeler.[36]</p>
                 </div>
-                <div class="card p-6 rounded-lg text-center">
-                    <h4 class="text-xl font-semibold text-indigo-400 mb-4">Months 5-6</h4>
-                    <p class="text-gray-300">Advanced AI & Integration: Deep learning and financial ML applications.</p>
+                <div id="resources-ai" class="resource-tab-content space-y-3">
+                    <h4 class="text-lg font-semibold text-sky-600">6.2. Artificial Intelligence</h4>
+                    <p><strong>General Machine Learning:</strong> Andrew Ng's "Machine Learning" course on Coursera [5] is a cornerstone. Textbooks like "Introduction to Machine Learning with Python" by Müller & Guido [17], "Pattern Recognition and Machine Learning" by Christopher Bishop [17, 22], and "Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow" by Aurélien Géron.[22]</p>
+                    <p><strong>Deep Learning:</strong> The "Deep Learning Specialization" by DeepLearning.AI on Coursera.[5, 6] The "Deep Learning" book by Goodfellow, Bengio, and Courville.[15, 22] Fast.ai's "Practical Deep Learning for Coders".[12, 28] Udacity Nanodegrees and courses on TensorFlow and PyTorch.[27]</p>
+                    <p><strong>Influential Papers:</strong> Foundational papers such as "Attention Is All You Need" [33] and key papers in CNNs, RNNs, and other relevant areas (see Appendix C via tab above).</p>
+                </div>
+                <div id="resources-finance" class="resource-tab-content space-y-3">
+                    <h4 class="text-lg font-semibold text-sky-600">6.3. Finance</h4>
+                     <p><strong>Financial Markets & Institutions:</strong> Yale University's "Financial Markets" course on Coursera.[8] The MITx "Finance" MicroMasters on edX.[7] Textbooks like "Financial Markets and Institutions" by Mishkin & Eakins.[23]</p>
+                    <p><strong>Investment Principles:</strong> IIMBx's "Introduction to Investments" on edX.[29] The University of Geneva's "Investment Management" Specialization on Coursera.[8] Classic books like "A Random Walk Down Wall Street" by Burton Malkiel and "The Intelligent Investor" by Benjamin Graham.[37]</p>
+                    <p><strong>Quantitative Finance:</strong> University of Pennsylvania's "Finance & Quantitative Modeling for Analysts" Specialization on Coursera.[9, 34] Textbooks like John Hull's "Options, Futures, and Other Derivatives" [35] and "The Concepts and Practice of Mathematical Finance" by Mark Joshi.[35]</p>
+                </div>
+                <div id="resources-books" class="resource-tab-content space-y-4">
+                    </div>
+                <div id="resources-courses" class="resource-tab-content space-y-4">
+                    </div>
+                <div id="resources-papers" class="resource-tab-content space-y-4">
+                    </div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-sky-700 mb-4">8. Tools & Libraries (from Report Appendix D)</h3>
+                 <p class="text-neutral-700 leading-relaxed mb-4">Proficiency with relevant software tools and libraries is essential. Python is the de facto standard. The table below details key Python libraries for AI, Math, and Finance.</p>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 border border-gray-300">
+                        <thead class="bg-sky-100">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-sky-700 uppercase tracking-wider">Library Name</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-sky-700 uppercase tracking-wider">Primary Use</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-sky-700 uppercase tracking-wider">Key Features/Relevance</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-sky-700 uppercase tracking-wider">Example/Docs Link</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200" id="tools-libraries-table-body">
+                            </tbody>
+                    </table>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Phases Section -->
-    <section id="phases" class="py-20 section">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h3 class="text-4xl font-bold text-center text-white mb-12">Learning Phases</h3>
-            <div class="space-y-12">
-                <div class="card p-8 rounded-lg">
-                    <h4 class="text-2xl font-semibold text-indigo-400 mb-4">Phase 1: Foundational Mathematics</h4>
-                    <p class="text-gray-300 mb-4">
-                        Build a robust mathematical toolkit with Linear Algebra, Calculus, and Probability & Statistics. Learn to implement concepts like Gaussian elimination and gradient descent in Python.
-                    </p>
-                    <p class="text-gray-400 italic">Resources: Strang’s “Introduction to Linear Algebra,” Khan Academy, Coursera’s Mathematics for ML.</p>
-                </div>
-                <div class="card p-8 rounded-lg">
-                    <h4 class="text-2xl font-semibold text-indigo-400 mb-4">Phase 2: Core Finance & AI Foundations</h4>
-                    <p class="text-gray-300 mb-4">
-                        Dive into financial markets, derivatives, and Python-based financial modeling. Begin exploring machine learning with probability and statistics tailored for AI.
-                    </p>
-                    <p class="text-gray-400 italic">Resources: Fabozzi’s “Foundations of Financial Markets,” Hull’s “Options, Futures,” Hilpisch’s “Python for Finance.”</p>
-                </div>
-                <div class="card p-8 rounded-lg">
-                    <h4 class="text-2xl font-semibold text-indigo-400 mb-4">Phase 3: Advanced AI & Financial Integration</h4>
-                    <p class="text-gray-300 mb-4">
-                        Master supervised/unsupervised learning, neural networks, and apply them to financial problems like algorithmic trading and risk management.
-                    </p>
-                    <p class="text-gray-400 italic">Resources: Ng’s “Deep Learning Specialization,” Lopez de Prado’s “Advances in Financial Machine Learning.”</p>
+        <section id="projects-growth" class="content-section space-y-6">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold text-sky-700 mb-3">Projects & Continuous Growth</h2>
+                <p class="text-neutral-700 leading-relaxed">
+                    Application of knowledge through projects is crucial for skill development. This section outlines key project milestones and ideas for a capstone project. Furthermore, it emphasizes the importance of continuous learning to stay relevant in the rapidly evolving fields of AI, Mathematics, and Finance, concluding with the roadmap's vision for your professional growth.
+                </p>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-sky-700 mb-4">7. Project Milestones & Capstone (from Report)</h3>
+                <p class="text-neutral-700 leading-relaxed mb-2">Practical application is key to solidifying knowledge. The roadmap incorporates several project milestones:</p>
+                <div class="space-y-3">
+                    <div>
+                        <h4 class="font-semibold text-sky-600">Month 3 Milestone: Basic Machine Learning Project</h4>
+                        <p class="text-neutral-700 ml-4">*Example:* Used Car Price Prediction using Linear Regression [21] or Sales Prediction.[21] This ensures early application of data preprocessing, feature engineering, and model training with regression techniques.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-sky-600">Month 5 Milestone: Foundational Deep Learning Project</h4>
+                        <p class="text-neutral-700 ml-4">*Example:* MNIST Handwritten Digit Classification using CNNs [32] or a basic NLP task like sentiment analysis using RNNs/LSTMs. This provides experience with neural network architectures and training.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-sky-600">Month 6 Capstone Project: Integrated AI, Math & Finance Project</h4>
+                        <p class="text-neutral-700 ml-4">A more comprehensive project. *Potential Ideas:*</p>
+                        <ul class="list-disc list-inside ml-8 text-neutral-700">
+                            <li>Stock Price/Direction Prediction using LSTMs or Transformers with sentiment analysis from news data. [26]</li>
+                            <li>Development and backtesting of a simple quantitative trading strategy.</li>
+                            <li>Customer churn prediction for a financial services company using various classification models. [21]</li>
+                            <li>Credit risk assessment model.</li>
+                        </ul>
+                        <p class="text-neutral-700 ml-4 mt-1">The capstone project should involve defining a clear problem, sourcing and preparing data, selecting and implementing appropriate models, evaluating performance, and interpreting results.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Footer -->
-    <footer class="py-12 bg-gray-900 text-center">
-        <p class="text-gray-400">Designed for ambitious software developers. Start your journey today.</p>
-        <p class="text-gray-500 mt-2">&copy; 2025 Interdisciplinary Curriculum. All rights reserved.</p>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-sky-700 mb-2">9. Maintaining Momentum & Continuous Learning (from Report)</h3>
+                <p class="text-neutral-700 leading-relaxed mb-2">The fields of AI and Quantitative Finance are characterized by rapid evolution. Completing this six-month roadmap is a significant achievement but should be viewed as the beginning of a continuous learning journey. To maintain momentum and stay abreast of developments:</p>
+                <ul class="list-disc list-inside space-y-1 text-neutral-700">
+                    <li><strong>Engage with Communities:</strong> Participate in online forums (e.g., Stack Exchange, Reddit communities like r/MachineLearning, r/quant), local meetups, and conferences.</li>
+                    <li><strong>Follow Research:</strong> Keep track of influential conferences (e.g., NeurIPS, ICML, AAAI for AI; financial journals for quant finance) and arXiv for pre-prints.[38, 39, 40]</li>
+                    <li><strong>Participate in Competitions:</strong> Platforms like Kaggle offer a plethora of datasets and competitions that provide invaluable practical experience in ML and data science.[21, 32, 41]</li>
+                    <li><strong>Work on Personal Projects:</strong> Continuously apply learned skills to new problems or datasets of personal interest.</li>
+                    <li><strong>Read Widely:</strong> Supplement structured learning with books, blogs, and articles from thought leaders in each domain.</li>
+                    <li><strong>Consider Specialization:</strong> After building a broad foundation, identify areas of particular interest for deeper specialization.</li>
+                </ul>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-sky-700 mb-2">10. Conclusion & Next Steps (from Report)</h3>
+                <p class="text-neutral-700 leading-relaxed">This six-month roadmap provides a comprehensive and intensive pathway for a software developer to gain substantial knowledge and practical skills in Artificial Intelligence, Mathematics, and Finance. The curriculum is designed to build a strong theoretical understanding, particularly in mathematics, which serves as the critical underpinning for advanced concepts in AI and quantitative finance. The emphasis on practical application through coding exercises, projects, and the use of industry-standard Python libraries ensures that theoretical learning is translated into demonstrable abilities.</p>
+                <p class="text-neutral-700 leading-relaxed mt-2">Successfully navigating this roadmap requires dedication, discipline, and a proactive approach to learning. The journey will be challenging but immensely rewarding, opening doors to new career opportunities at the intersection of technology and finance. Upon completion, the individual will be well-equipped to understand and implement AI-driven solutions, appreciate the mathematical rigor behind them, and apply these skills within a financial context. The next step is to embark on this learning path with commitment, leveraging the structured guidance provided herein to systematically build expertise. The continuous evolution of these fields necessitates an ongoing commitment to learning, ensuring that the skills acquired remain relevant and potent in a dynamic professional landscape.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-sky-800 text-sky-100 text-center p-4 mt-8">
+        <p>&copy; Strategic Roadmap Explorer. Based on the "Six-Month Strategic Roadmap for Skill Augmentation".</p>
     </footer>
 
-    <script>
-        // Smooth scroll for navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+<script>
+    const weeklyPlanData = [
+        { week: 1, month: 1, focus: "Math (Linear Algebra)", topics: "Vectors, Matrices, Dot Products, Matrix Multiplication, Systems of Linear Equations. Geometric Interpretations.", resources: "Course: edX - \"Introductory Linear Algebra\" (GTx) - Modules 1-2.[1] Book: Strang, G. \"Introduction to Linear Algebra\" - Chapters 1-2.", activities: "Solve practice problems on vector/matrix operations.[13, 14] Implement basic operations in Python with NumPy.", time: "15-20" },
+        { week: 2, month: 1, focus: "Math (Linear Algebra)", topics: "Linear Independence, Span, Basis, Determinants, Eigenvalues & Eigenvectors.", resources: "Course: edX - \"Introductory Linear Algebra\" (GTx) - Modules 3-4.[1] Book: Strang, G. \"Introduction to Linear Algebra\" - Chapters 3-6.", activities: "Calculate eigenvalues/eigenvectors for sample matrices.[13] Explore applications in data transformation.", time: "15-20" },
+        { week: 3, month: 1, focus: "Math (Calculus)", topics: "Limits, Continuity, Derivatives (rules, chain rule), Tangent Lines, Maxima/Minima of functions.", resources: "Course: Coursera - \"Mathematics for Machine Learning: Multivariate Calculus\" (Imperial College London) - relevant sections on single-variable calculus review.[3] Book: \"Calculus For Dummies\" - Parts III & IV.[15]", activities: "Work through derivative examples. Plot functions and their derivatives.", time: "15-20" },
+        { week: 4, month: 1, focus: "Math (Calculus)", topics: "Integration (definite, indefinite, techniques), Fundamental Theorem of Calculus, Area under curves. Introduction to optimization concepts.", resources: "Course: Coursera - \"Introduction to Calculus\" (University of Sydney) - relevant modules.[3] Book: \"Calculus For Dummies\" - Part V.[15]", activities: "Solve integration problems. Workbook: \"Machine Learning Calculus Practice Problems Workbook\" - relevant sections.[16]", time: "15-20" },
+        { week: 5, month: 2, focus: "Math (Probability & Statistics)", topics: "Basic Probability, Conditional Probability, Bayes' Theorem, Random Variables, Probability Distributions (Binomial, Poisson, Normal).", resources: "Course: Coursera - DeepLearning.AI \"Probability & Statistics for Machine Learning & Data Science\" - Weeks 1-2.[4] Book: Ross, S. \"A First Course in Probability\" - Chapters 1-5.[17]", activities: "Solve probability problems.[18, 19] Implement Bayes' theorem for a simple classification.", time: "15-20" },
+        { week: 6, month: 2, focus: "Math (Probability & Statistics)", topics: "Descriptive Statistics (Mean, Median, Variance), Sampling, Central Limit Theorem, Hypothesis Testing (t-tests, chi-squared), Introduction to Linear Regression.", resources: "Course: Coursera - DeepLearning.AI \"Probability & Statistics for Machine Learning & Data Science\" - Weeks 3-4.[4] Course: IBM \"Statistics for Data Science with Python\" - for practical application.[4]", activities: "Perform descriptive analysis on a dataset. Conduct a simple hypothesis test.", time: "15-20" },
+        { week: 7, month: 2, focus: "Math (Multivariate Calculus)", topics: "Partial Derivatives, Gradients, Directional Derivatives, Hessian Matrix, Jacobian Matrix.", resources: "Course: Coursera - \"Mathematics for Machine Learning: Multivariate Calculus\" (Imperial College London) - Core modules.[3] Book: \"Deep Learning\" by Goodfellow, Bengio, Courville - Chapter 4 (Numerical Computation).[15]", activities: "Calculate gradients for multivariate functions. Understand their role in optimization.", time: "15-20" },
+        { week: 8, month: 2, focus: "Math (Optimization)", topics: "Unconstrained Optimization, Gradient Descent (Batch, Stochastic), Convexity.", resources: "Book: \"Deep Learning\" by Goodfellow, Bengio, Courville - Chapter 4.[15] Course: Review optimization sections in ML courses. Paper: Overview of optimization concepts.[20]", activities: "Implement a simple gradient descent algorithm in Python.", time: "15-20" },
+        { week: 9, month: 3, focus: "AI (Machine Learning Intro)", topics: "What is ML? Supervised (Classification, Regression) vs. Unsupervised Learning (Clustering). Model Representation, Training & Testing, Overfitting, Bias-Variance Tradeoff.", resources: "Course: Coursera - \"Machine Learning\" by Stanford (Andrew Ng) - Weeks 1-2.[5] Book: Theobald, O. \"Machine Learning for Absolute Beginners\" - Chapters 1-5.[17]", activities: "Set up Python ML environment (scikit-learn). Explore simple datasets.", time: "15-20" },
+        { week: 10, month: 3, focus: "AI (Linear Regression)", topics: "Simple and Multiple Linear Regression, Cost Functions (MSE), Gradient Descent for LR, Normal Equation. Assumptions of LR.", resources: "Course: Coursera - \"Machine Learning\" (Andrew Ng) - Weeks 2-3.[5] Book: Müller, A. & Guido, S. \"Introduction to Machine Learning with Python\" - Chapter 2.[17]", activities: "Implement Linear Regression from scratch and with scikit-learn. Project: Used Car Price Prediction (Kaggle dataset).[21]", time: "15-20" },
+        { week: 11, month: 3, focus: "AI (Logistic Regression & Regularization)", topics: "Logistic Regression for Classification, Sigmoid Function, Cost Function for LR, Regularization (L1, L2) to combat overfitting.", resources: "Course: Coursera - \"Machine Learning\" (Andrew Ng) - Weeks 3-4.[5] Book: \"Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow\" by Géron - Chapter 4.[22]", activities: "Implement Logistic Regression. Apply regularization and observe effects.", time: "15-20" },
+        { week: 12, month: 3, focus: "Finance (Markets & Institutions)", topics: "Overview of Financial System, Types of Financial Markets (Money, Bond, Stock, Forex, Mortgage), Financial Institutions (Banks, Mutual Funds, Insurance), Role of Central Banks.", resources: "Course: edX - MITx \"Finance\" MicroMasters (e.g., Foundations of Modern Finance I) - introductory modules.[1, 7] Course: Yale University \"Financial Markets\" on Coursera - Weeks 1-2.[8] Book: Mishkin, F. & Eakins, S. \"Financial Markets and Institutions\" - Parts 1-2.[23]", activities: "Read case studies on financial crises.[24, 25]", time: "15-20" },
+        { week: 13, month: 4, focus: "AI (SVMs, Trees, Forests)", topics: "Support Vector Machines (SVMs), Decision Trees, Random Forests, Ensemble Methods.", resources: "Course: Coursera - \"Machine Learning\" (Andrew Ng) - Weeks 7, 9 (SVMs, Anomaly Detection/Recommenders as examples of other techniques).[5] Book: \"Hands-On Machine Learning\" - Chapters 5-7.[22]", activities: "Implement SVMs and Decision Trees. Project: Iris Flower Classification.[21, 26]", time: "15-20" },
+        { week: 14, month: 4, focus: "AI (Intro to Neural Networks & Deep Learning)", topics: "Neurons, Layers, Activation Functions (Sigmoid, Tanh, ReLU), Feedforward Neural Networks, Backpropagation (conceptual).", resources: "Course: Coursera - DeepLearning.AI \"Deep Learning Specialization\" - Course 1: \"Neural Networks and Deep Learning\" - Weeks 1-2.[6] Book: \"Deep Learning\" by Goodfellow et al. - Chapters 1, 6.[15, 22]", activities: "Build a simple neural network conceptually. Understand the flow of data and error.", time: "15-20" },
+        { week: 15, month: 4, focus: "AI (Deep Learning Frameworks)", topics: "Introduction to TensorFlow & Keras or PyTorch. Building and training simple NNs.", resources: "Course: Udacity - \"Intro to TensorFlow for Deep Learning\" [27] OR Udacity - \"Intro to Deep Learning with PyTorch\".[27] Course: Fast.ai - \"Practical Deep Learning for Coders\" - Lesson 1-2.[12, 28]", activities: "Implement a basic NN for a classification task using a chosen framework.", time: "15-20" },
+        { week: 16, month: 4, focus: "Finance (Investment Principles)", topics: "Risk & Return, Diversification, Asset Classes (Equities, Bonds, Real Estate, Commodities), Efficient Market Hypothesis (briefly). Portfolio Basics.", resources: "Course: edX - IIMBx \"Introduction to Investments\".[29] Course: Coursera - University of Geneva \"Investment Management\" Specialization - Course 1.[8] Articles: \"How Diversification Can Help You Manage Market Volatility\" [30], \"Diversification 2.0\".[31]", activities: "Analyze historical returns of different asset classes. Construct a simple diversified mock portfolio.", time: "15-20" },
+        { week: 17, month: 5, focus: "AI (Convolutional Neural Networks - CNNs)", topics: "CNN Architecture (Convolutional layers, Pooling layers, Fully Connected layers), Applications in Image Recognition.", resources: "Course: Coursera - DeepLearning.AI \"Deep Learning Specialization\" - Course 4: \"Convolutional Neural Networks\" - Weeks 1-2.[5, 6] Book: \"Hands-On Machine Learning\" - Chapter 14.[22]", activities: "Implement a CNN for image classification (e.g., MNIST [32] or CIFAR-10 [32]).", time: "15-20" },
+        { week: 18, month: 5, focus: "AI (Sequential Models - RNNs, Transformers Intro)", topics: "Recurrent Neural Networks (RNNs), LSTMs, GRUs. Introduction to Attention Mechanism and Transformers.", resources: "Course: Coursera - DeepLearning.AI \"Deep Learning Specialization\" - Course 5: \"Sequence Models\" - Weeks 1-2.[5, 6] Paper: Vaswani et al. \"Attention Is All You Need\" (for conceptual understanding).[33]", activities: "Implement a simple RNN/LSTM for a sequence task (e.g., text generation or sentiment analysis).", time: "15-20" },
+        { week: 19, month: 5, focus: "Finance (Quantitative Finance Intro)", topics: "Introduction to Financial Time Series, Stationarity, Autocorrelation. Basic Quantitative Models.", resources: "Course: Coursera - University of Pennsylvania \"Finance & Quantitative Modeling for Analysts\" Specialization - relevant modules.[9, 34] Course: Coursera - HKUST \"Python and Statistics for Financial Analysis\".[9]", activities: "Analyze financial time series data (e.g., stock prices) for basic properties using Python (Pandas, Statsmodels).", time: "15-20" },
+        { week: 20, month: 5, focus: "Finance (Quantitative Trading Strategies Intro)", topics: "Moving Average Crossover, Mean Reversion concepts. Introduction to Backtesting. Python libraries for TA (TA-Lib).", resources: "Book: McKinney, W. \"Python for Data Analysis\" - Time Series Chapter.[35] Libraries: TA-Lib [10, 11], yfinance for data.[11]", activities: "Implement a simple moving average strategy. Fetch stock data using yfinance and apply TA-Lib indicators.", time: "15-20" },
+        { week: 21, month: 6, focus: "Specialized Topic Selection & Study", topics: "Choose one: Advanced NLP (e.g., Transformers in-depth, Hugging Face) / Reinforcement Learning Basics / Advanced Financial Modeling (e.g., Options Pricing, Risk Management).", resources: "Based on choice: Relevant advanced courses from Coursera/Udacity (e.g., NLP Specialization, RL Specialization), textbooks (e.g., Jurafsky & Martin for NLP, Sutton & Barto for RL [35], Hull for Derivatives [35]).", activities: "Deep dive into the chosen specialization, focusing on core concepts and initial implementations.", time: "15-20" },
+        { week: 22, month: 6, focus: "Capstone Project", topics: "Project Definition & Planning: Define a problem statement integrating AI/Math with Finance. Outline data sources, methodology, and expected deliverables.", resources: "Examples: Stock Price Prediction using LSTMs/Transformers [26], Algorithmic Trading Bot (simple strategy with backtesting), Credit Scoring Model, Customer Churn Prediction for a financial service.[21]", activities: "Finalize project scope. Begin literature review and data collection.", time: "15-20" },
+        { week: 23, month: 6, focus: "Capstone Project", topics: "Project Development & Implementation: Data preprocessing, model building, training, and initial evaluation.", resources: "Utilize Python libraries extensively. Document code and methodology.", activities: "Iteratively develop and refine the model. Address challenges encountered.", time: "15-20" },
+        { week: 24, month: 6, focus: "Capstone Project", topics: "Project Finalization & Presentation: Complete model evaluation, result interpretation, documentation, and prepare a summary/presentation of the project.", resources: "", activities: "Write a comprehensive report on the project. Reflect on the learning journey.", time: "15-20" }
+    ];
+
+    const toolsAndLibrariesData = [
+        { name: "NumPy", use: "Math, AI", features: "Fundamental package for numerical computation; N-dimensional arrays, linear algebra, Fourier transform, random number capabilities. Essential for data representation and manipulation in ML. [10, 11]", docs: "import numpy as np (Official Documentation)" },
+        { name: "Pandas", use: "Math, AI, Finance", features: "Data analysis and manipulation tool; Provides DataFrame objects for handling structured data, time series functionality. Crucial for data cleaning, transformation, and analysis. [10, 11]", docs: "import pandas as pd (Official Documentation)" },
+        { name: "Matplotlib", use: "Math, AI, Finance", features: "Comprehensive library for creating static, animated, and interactive visualizations. Used for plotting data, model performance, financial charts. [11]", docs: "import matplotlib.pyplot as plt (Official Documentation)" },
+        { name: "SciPy", use: "Math, AI", features: "Ecosystem of open-source software for mathematics, science, and engineering; builds on NumPy, providing modules for optimization, linear algebra, integration, statistics.", docs: "import scipy (Official Documentation)" },
+        { name: "Scikit-learn", use: "AI", features: "Simple and efficient tools for data mining and data analysis; features various classification, regression, clustering algorithms, model selection, and preprocessing. [11]", docs: "from sklearn import svm (Official Documentation)" },
+        { name: "TensorFlow", use: "AI (Deep Learning)", features: "End-to-end open-source platform for machine learning; comprehensive, flexible ecosystem of tools, libraries, and community resources for building and deploying ML-powered applications, especially deep neural networks. [5, 11]", docs: "import tensorflow as tf (Official Documentation)" },
+        { name: "Keras", use: "AI (Deep Learning)", features: "High-level API for building and training deep learning models; often used with TensorFlow as its backend. Known for user-friendliness and rapid prototyping. [11]", docs: "from tensorflow import keras (Official Documentation)" },
+        { name: "PyTorch", use: "AI (Deep Learning)", features: "Open-source machine learning library based on the Torch library; used for applications such as computer vision and natural language processing. Known for its flexibility and dynamic computation graphs. [6, 27]", docs: "import torch (Official Documentation)" },
+        { name: "Statsmodels", use: "Math, Finance", features: "Python module that provides classes and functions for the estimation of many different statistical models, as well as for conducting statistical tests, and statistical data exploration.", docs: "import statsmodels.api as sm (Official Documentation)" },
+        { name: "TA-Lib", use: "Finance (Technical Analysis)", features: "Widely used library for technical analysis of financial market data; provides common financial technical indicators like RSI, MACD, Bollinger Bands. [10, 11]", docs: "import talib (Official Documentation)" },
+        { name: "yfinance", use: "Finance (Data Retrieval)", features: "Popular library to download historical market data from Yahoo Finance. [11]", docs: "import yfinance as yf (Official Documentation)" },
+        { name: "Zipline / PyAlgoTrade", use: "Finance (Backtesting)", features: "Libraries for event-driven backtesting of algorithmic trading strategies. Zipline was notably used by Quantopian. [10]", docs: "(Official Documentation for each)" }
+    ];
+
+    const appendixAData = {
+        title: "Appendix A: Recommended Books (Categorized)",
+        categories: [
+            { name: "Mathematics", subcategories: [
+                { name: "Linear Algebra", items: ["Strang, G. (2016). *Introduction to Linear Algebra* (5th ed.). Wellesley-Cambridge Press.", "Deisenroth, M. P., Faisal, A. A., & Ong, C. S. (2020). *Mathematics for Machine Learning*. Cambridge University Press. [22] (Covers Linear Algebra, Calculus, Probability)"]},
+                { name: "Calculus", items: ["Stewart, J. (2015). *Calculus* (8th ed.). Cengage Learning. [15]", "Strang, G. (2017). *Calculus* (3rd ed.). Wellesley-Cambridge Press. [15]", "Sterling, M. (2016). *Calculus For Dummies* (2nd ed.). For Dummies. [15]", "Flux, J. (2024). *Machine Learning Calculus Practice Problems Workbook*. Independently published. [16]"]},
+                { name: "Probability & Statistics", items: ["Ross, S. (2019). *A First Course in Probability* (10th ed.). Pearson. [17]", "Casella, G., & Berger, R. L. (2002). *Statistical Inference* (2nd ed.). Duxbury Press. [35]", "James, G., Witten, D., Hastie, T., & Tibshirani, R. (2013). *An Introduction to Statistical Learning*. Springer."]},
+                { name: "Optimization", items: ["Kochenderfer, M. J., & Wheeler, T. A. (2019). *Algorithms for Optimization*. MIT Press. [36]", "Boyd, S., & Vandenberghe, L. (2004). *Convex Optimization*. Cambridge University Press."]}
+            ]},
+            { name: "Artificial Intelligence", subcategories: [
+                { name: "General Machine Learning", items: ["Bishop, C. M. (2006). *Pattern Recognition and Machine Learning*. Springer. [17, 22]", "Géron, A. (2019). *Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow* (2nd ed.). O'Reilly Media. [22]", "Müller, A. C., & Guido, S. (2016). *Introduction to Machine Learning with Python: A Guide for Data Scientists*. O'Reilly Media. [17]", "Theobald, O. (2017). *Machine Learning for Absolute Beginners* (2nd ed.). Independently published. [17]", "Burkov, A. (2019). *The Hundred-Page Machine Learning Book*. Andriy Burkov. [17, 22]"]},
+                { name: "Deep Learning", items: ["Goodfellow, I., Bengio, Y., & Courville, A. (2016). *Deep Learning*. MIT Press. [15, 22]", "Chollet, F. (2021). *Deep Learning with Python* (2nd ed.). Manning Publications.", "Bishop, C. M. (2023). *Deep Learning: Foundations and Concepts*. Springer. [42]", "Buduma, N. (2017). *Fundamentals of Deep Learning: Designing Next-Generation Machine Intelligence Algorithms*. O'Reilly Media. [43]"]},
+                { name: "Reinforcement Learning", items: ["Sutton, R. S., & Barto, A. G. (2018). *Reinforcement Learning: An Introduction* (2nd ed.). MIT Press. [35]"]},
+                { name: "Natural Language Processing", items: ["Jurafsky, D., & Martin, J. H. (2023). *Speech and Language Processing* (3rd ed. draft). Prentice Hall."]}
+            ]},
+            { name: "Finance", subcategories: [
+                { name: "Financial Markets & Institutions", items: ["Mishkin, F. S., & Eakins, S. G. (2024). *Financial Markets and Institutions* (10th ed.). Pearson. [23]"]},
+                { name: "Investment Principles & Management", items: ["Bodie, Z., Kane, A., & Marcus, A. J. (2020). *Investments* (12th ed.). McGraw-Hill Education.", "Malkiel, B. G. (2023). *A Random Walk Down Wall Street: The Time-Tested Strategy for Successful Investing* (13th ed.). W. W. Norton & Company. [37]", "Graham, B. (2006). *The Intelligent Investor* (Revised ed.). Harper Business. [37]", "Ang, A. (2014). *Asset Management: A Systematic Approach to Factor Investing*. Oxford University Press. [35]"]},
+                { name: "Quantitative Finance & Derivatives", items: ["Hull, J. C. (2021). *Options, Futures, and Other Derivatives* (11th ed.). Pearson. [35]", "Joshi, M. S. (2008). *The Concepts and Practice of Mathematical Finance* (2nd ed.). Cambridge University Press. [35]", "Wilmott, P. (2007). *Paul Wilmott on Quantitative Finance* (2nd ed.). Wiley. [35]", "Kelliher, C. (2024). *Quantitative Finance with Case Studies in Python: A Practical Guide to Investment Management, Trading and Financial Engineering* (2nd ed.). Routledge. [44, 45]"]},
+                { name: "Financial Time Series & Econometrics", items: ["Tsay, R. S. (2010). *Analysis of Financial Time Series* (3rd ed.). Wiley. [35]", "Campbell, J. Y., Lo, A. W., & MacKinlay, A. C. (1997). *The Econometrics of Financial Markets*. Princeton University Press. [35]"]}
+            ]}
+        ]
+    };
+
+    const appendixBData = {
+        title: "Appendix B: Recommended Online Courses (Categorized)",
+        categories: [
+            { name: "Mathematics", platforms: [
+                { name: "edX", items: ["\"Introductory Linear Algebra\" - GTx [1]", "\"Mastering Linear Algebra\" - DelftX [1]", "\"Essential Math for AI Programming & Data Structures\" - ColumbiaX [1]"]},
+                { name: "Coursera", items: ["\"Mathematics for Machine Learning Specialization\" - Imperial College London (covers Linear Algebra, Multivariate Calculus, PCA) [3, 4]", "\"Introduction to Calculus\" - The University of Sydney [3]", "\"Probability & Statistics for Machine Learning & Data Science\" - DeepLearning.AI [4]", "\"Statistics for Data Science with Python\" - IBM [4]", "\"Introduction to Statistics\" - Stanford University [4]"]}
+            ]},
+            { name: "Artificial Intelligence", platforms: [
+                { name: "Coursera", items: ["\"Machine Learning\" - Stanford University (Andrew Ng) [5]", "\"Deep Learning Specialization\" - DeepLearning.AI (Andrew Ng) [5, 6]", "\"Machine Learning with Python\" - IBM [46]", "\"Advanced Machine Learning Specialization\" - HSE University [5]"]},
+                { name: "Udacity", items: ["\"AI Programming with Python Nanodegree\" [27]", "\"Introduction to Machine Learning with TensorFlow Nanodegree\" [27, 47]", "\"Introduction to Machine Learning with PyTorch Nanodegree\" [27, 47]", "\"Deep Learning Nanodegree\" [27]", "\"Intro to TensorFlow for Deep Learning\" (Free Course) [27]", "\"Intro to Deep Learning with PyTorch\" (Free Course) [27]"]},
+                { name: "Fast.ai", items: ["\"Practical Deep Learning for Coders\" [5, 12, 28]"]},
+                { name: "edX", items: ["\"Machine Learning\" - Columbia University [5] (Part of MicroMasters)"]}
+            ]},
+            { name: "Finance", platforms: [
+                 { name: "Coursera", items: ["\"Financial Markets\" - Yale University (Robert Shiller) [8, 9]", "\"Investment Management Specialization\" - University of Geneva [8]", "\"Investment and Portfolio Management Specialization\" - Rice University [8]", "\"Finance & Quantitative Modeling for Analysts Specialization\" - University of Pennsylvania (Wharton) [9, 34]", "\"Financial Engineering and Risk Management Specialization\" - Columbia University [9]", "\"Python and Statistics for Financial Analysis\" - The Hong Kong University of Science and Technology [9]"]},
+                 { name: "edX", items: ["\"Finance MicroMasters\" - MITx (includes Foundations of Modern Finance, Financial Accounting, etc.) [1, 7]", "\"Introduction to Investments\" - IIMBx [29]", "\"Corporate Finance\" - ColumbiaX [7, 48]", "\"Capital Markets\" - NYIF [48]"]}
+            ]}
+        ]
+    };
+    
+    const appendixCData = {
+        title: "Appendix C: Influential Research Papers (Categorized)",
+        categories: [
+            { name: "Machine Learning & Deep Learning Foundations", items: [
+                "LeCun, Y., Bengio, Y., & Hinton, G. (2015). Deep learning. *Nature*, 521(7553), 436-444. [33]",
+                "Rumelhart, D. E., Hinton, G. E., & Williams, R. J. (1986). Learning representations by back-propagating errors. *Nature*, 323(6088), 533-536. [33]",
+                "Krizhevsky, A., Sutskever, I., & Hinton, G. E. (2012). ImageNet classification with deep convolutional neural networks. *Advances in neural information processing systems (NIPS)*, 25. [33] (AlexNet)",
+                "Simonyan, K., & Zisserman, A. (2014). Very deep convolutional networks for large-scale image recognition. *arXiv preprint arXiv:1409.1556*. (VGGNet) [33]",
+                "He, K., Zhang, X., Ren, S., & Sun, J. (2016). Deep residual learning for image recognition. *Proceedings of the IEEE conference on computer vision and pattern recognition (CVPR)*. (ResNet) [33]",
+                "Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N.,... & Polosukhin, I. (2017). Attention is all you need. *Advances in neural information processing systems (NIPS)*, 30. [33]",
+                "Goodfellow, I. J., Pouget-Abadie, J., Mirza, M., Xu, B., Warde-Farley, D., Ozair, S.,... & Bengio, Y. (2014). Generative adversarial nets. *Advances in neural information processing systems (NIPS)*, 27.",
+                "Survey Papers on Graph Neural Networks (various authors, e.g., Zhou et al., 2020; Wu et al., 2019 on arXiv) [40]"
+            ]},
+            { name: "Quantitative Finance & AI in Finance (Illustrative)", items: [
+                "Black, F., & Scholes, M. (1973). The Pricing of Options and Corporate Liabilities. *Journal of Political Economy*, 81(3), 637-654. (Seminal options pricing model)",
+                "Fama, E. F. (1970). Efficient Capital Markets: A Review of Theory and Empirical Work. *The Journal of Finance*, 25(2), 383-417. (Efficient Market Hypothesis)",
+                "Carhart, M. M. (1997). On Persistence in Mutual Fund Performance. *The Journal of Finance*, 52(1), 57-82. (Four-factor model)",
+                "Lopez de Prado, M. (2018). *Advances in Financial Machine Learning*. Wiley. (This is a book, but indicative of the research direction) [35]",
+                "Research on applying ML to market prediction, risk management, algorithmic trading (often found in journals like *The Journal of Financial Data Science*, *Quantitative Finance*, or conference proceedings)."
+            ]},
+            { name: "Note", items: ["Many foundational concepts in finance are established through seminal textbooks and might not always be single \"papers\" in the same way as AI breakthroughs."]}
+        ]
+    };
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const navButtons = document.querySelectorAll('.nav-button');
+        const contentSections = document.querySelectorAll('.content-section');
+        const resourceTabButtons = document.querySelectorAll('.resource-tab-button');
+        const resourceTabContents = document.querySelectorAll('.resource-tab-content');
+        const monthSelector = document.getElementById('month-selector');
+        const weeklyPlanContainer = document.getElementById('weekly-plan-content');
+        const toolsTableBody = document.getElementById('tools-libraries-table-body');
+
+        // Initial setup: Show the first section
+        if (contentSections.length > 0) {
+            contentSections[0].classList.add('active');
+        }
+        if (navButtons.length > 0) {
+            navButtons[0].classList.add('active-nav');
+        }
+         if (resourceTabContents.length > 0) {
+            resourceTabContents[0].classList.add('active');
+        }
+        if (resourceTabButtons.length > 0) {
+            resourceTabButtons[0].classList.add('active');
+        }
+
+
+        // Navigation
+        navButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                navButtons.forEach(btn => btn.classList.remove('active-nav'));
+                button.classList.add('active-nav');
+
+                contentSections.forEach(section => section.classList.remove('active'));
+                document.getElementById(button.dataset.target).classList.add('active');
+                window.scrollTo(0,0); // Scroll to top on section change
             });
         });
 
-        // Fade-in animation for sections
-        const sections = document.querySelectorAll('.section');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
+        // Resource Tabs
+        resourceTabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                resourceTabButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                resourceTabContents.forEach(content => content.classList.remove('active'));
+                document.getElementById(button.dataset.resourceTarget).classList.add('active');
             });
-        }, { threshold: 0.1 });
+        });
+        
+        // Populate Appendix A (Books)
+        const booksContainer = document.getElementById('resources-books');
+        let booksHtml = `<h4 class="text-lg font-semibold text-sky-600">${appendixAData.title}</h4>`;
+        appendixAData.categories.forEach(cat => {
+            booksHtml += `<div class="mt-3"><h5 class="font-semibold text-md text-neutral-700">${cat.name}</h5>`;
+            cat.subcategories.forEach(subCat => {
+                booksHtml += `<p class="ml-4 mt-1 text-sm font-medium text-neutral-600">${subCat.name}:</p>`;
+                booksHtml += `<ul class="list-disc list-inside ml-8 space-y-1 text-sm text-neutral-600">`;
+                subCat.items.forEach(item => booksHtml += `<li>${item}</li>`);
+                booksHtml += `</ul>`;
+            });
+            booksHtml += `</div>`;
+        });
+        booksContainer.innerHTML = booksHtml;
 
-        sections.forEach(section => observer.observe(section));
-    </script>
+        // Populate Appendix B (Courses)
+        const coursesContainer = document.getElementById('resources-courses');
+        let coursesHtml = `<h4 class="text-lg font-semibold text-sky-600">${appendixBData.title}</h4>`;
+        appendixBData.categories.forEach(cat => {
+            coursesHtml += `<div class="mt-3"><h5 class="font-semibold text-md text-neutral-700">${cat.name}</h5>`;
+            cat.platforms.forEach(platform => {
+                coursesHtml += `<p class="ml-4 mt-1 text-sm font-medium text-neutral-600">${platform.name}:</p>`;
+                coursesHtml += `<ul class="list-disc list-inside ml-8 space-y-1 text-sm text-neutral-600">`;
+                platform.items.forEach(item => coursesHtml += `<li>${item}</li>`);
+                coursesHtml += `</ul>`;
+            });
+            coursesHtml += `</div>`;
+        });
+        coursesContainer.innerHTML = coursesHtml;
+
+        // Populate Appendix C (Papers)
+        const papersContainer = document.getElementById('resources-papers');
+        let papersHtml = `<h4 class="text-lg font-semibold text-sky-600">${appendixCData.title}</h4>`;
+        appendixCData.categories.forEach(cat => {
+            papersHtml += `<div class="mt-3"><h5 class="font-semibold text-md text-neutral-700">${cat.name}</h5>`;
+            papersHtml += `<ul class="list-disc list-inside ml-4 space-y-1 text-sm text-neutral-600">`;
+            cat.items.forEach(item => papersHtml += `<li>${item}</li>`);
+            papersHtml += `</ul></div>`;
+        });
+        papersContainer.innerHTML = papersHtml;
+
+
+        // Populate Tools & Libraries Table
+        toolsAndLibrariesData.forEach(tool => {
+            const row = toolsTableBody.insertRow();
+            row.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap font-medium">${tool.name}</td>
+                <td class="px-6 py-4 whitespace-nowrap">${tool.use}</td>
+                <td class="px-6 py-4">${tool.features}</td>
+                <td class="px-6 py-4 whitespace-nowrap">${tool.docs}</td>
+            `;
+        });
+
+        // Weekly Plan Interaction
+        const totalMonths = 6;
+        for (let i = 1; i <= totalMonths; i++) {
+            const button = document.createElement('button');
+            button.textContent = `Month ${i}`;
+            button.classList.add('month-button', 'px-4', 'py-2', 'rounded-md', 'bg-sky-200', 'text-sky-700', 'hover:bg-sky-300', 'transition-colors');
+            button.dataset.month = i;
+            if (i === 1) button.classList.add('active');
+            monthSelector.appendChild(button);
+        }
+
+        const monthButtons = document.querySelectorAll('.month-button');
+        
+        function displayWeeklyPlan(month) {
+            weeklyPlanContainer.innerHTML = ''; // Clear previous weeks
+            const weeksForMonth = weeklyPlanData.filter(w => w.month == month);
+            weeksForMonth.forEach(week => {
+                const card = document.createElement('div');
+                card.classList.add('week-card', 'border', 'border-sky-200', 'rounded-lg', 'overflow-hidden', 'shadow');
+                card.innerHTML = `
+                    <div class="week-header bg-sky-50 p-4 cursor-pointer hover:bg-sky-100 transition-colors">
+                        <h4 class="text-md font-semibold text-sky-700">Week ${week.week}: ${week.focus}</h4>
+                    </div>
+                    <div class="week-details p-4 border-t border-sky-200 bg-white text-sm space-y-2">
+                        <p><strong>Topics:</strong> ${week.topics}</p>
+                        <p><strong>Resources:</strong> ${week.resources}</p>
+                        <p><strong>Activities:</strong> ${week.activities}</p>
+                        <p><strong>Est. Time:</strong> ${week.time} hrs</p>
+                    </div>
+                `;
+                weeklyPlanContainer.appendChild(card);
+
+                const header = card.querySelector('.week-header');
+                header.addEventListener('click', () => {
+                    card.classList.toggle('expanded');
+                });
+            });
+        }
+
+        monthButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                monthButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                displayWeeklyPlan(button.dataset.month);
+            });
+        });
+
+        displayWeeklyPlan(1); // Display Month 1 initially
+
+
+        // Chart.js for Phases Overview
+        const phasesChartCtx = document.getElementById('phasesChart').getContext('2d');
+        const phasesData = {
+            labels: ['Phase 1: Foundational Mathematics (Months 1-2)', 'Phase 2: Core AI & Intro to Finance (Months 3-4)', 'Phase 3: Advanced AI, Quant Finance & Capstone (Months 5-6)'],
+            datasets: [{
+                label: 'Duration (Months)',
+                data: [2, 2, 2], // Duration for each phase
+                backgroundColor: [
+                    'rgba(56, 189, 248, 0.6)', // sky-400 with opacity
+                    'rgba(14, 165, 233, 0.6)', // sky-500 with opacity
+                    'rgba(3, 105, 161, 0.6)'  // sky-700 with opacity
+                ],
+                borderColor: [
+                    'rgba(56, 189, 248, 1)',
+                    'rgba(14, 165, 233, 1)',
+                    'rgba(3, 105, 161, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+        new Chart(phasesChartCtx, {
+            type: 'bar', // Changed to bar for better label readability
+            data: phasesData,
+            options: {
+                indexAxis: 'y', // Makes it a horizontal bar chart
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false // Hiding legend as it's clear from labels
+                    },
+                    title: {
+                        display: true,
+                        text: 'Roadmap Phase Durations',
+                        font: { size: 16, weight: 'bold' },
+                        color: '#0c4a6e' // sky-800
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `Duration: ${context.raw} months`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Duration (Months)',
+                            font: { size: 12 },
+                            color: '#374151' // neutral-700
+                        },
+                        ticks: {
+                             stepSize: 1
+                        }
+                    },
+                    y: {
+                         ticks: {
+                            font: { size: 10 }, // Smaller font for phase labels if needed
+                            color: '#374151', // neutral-700
+                             autoSkip: false, // Ensure all labels are shown
+                             maxRotation: 0, // Keep labels horizontal
+                             minRotation: 0
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
 </body>
 </html>
